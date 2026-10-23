@@ -6,7 +6,7 @@ export function FeaturesSection() {
     {
       title: "100% In-Browser Privacy",
       description:
-        "Your photos never leave your device. The neural network runs entirely inside your browser's local sandbox, with zero cloud storage.",
+        "Your photos never leave your device. The neural network runs entirely inside your browser's local sandbox, with zero cloud uploads.",
       icon: Shield,
     },
     {
@@ -18,7 +18,7 @@ export function FeaturesSection() {
     {
       title: "Sub-Pixel Hair & Fur Matting",
       description:
-        "Trained on complex real-world boundaries, the ISNet model accurately separates flyaway hair strands, fur, and semi-transparent objects.",
+        "Trained on complex real-world boundaries, the ISNet model accurately separates flyaway hair strands, pet fur, and transparent objects.",
       icon: Wand2,
     },
     {
@@ -42,32 +42,32 @@ export function FeaturesSection() {
   ];
 
   return (
-    <section id="features" className="py-14 border-b border-zinc-800/60 bg-zinc-950">
+    <section id="features" className="py-16 border-b border-slate-200 bg-slate-50">
       <div className="mx-auto max-w-5xl px-4 sm:px-6">
-        <div className="text-center max-w-2xl mx-auto mb-10 space-y-2">
-          <h2 className="text-2xl sm:text-3xl font-bold tracking-tight text-zinc-100">
-            Engineered for Creators & Developers
+        <div className="text-center max-w-2xl mx-auto mb-12 space-y-2">
+          <h2 className="text-2xl sm:text-3xl font-extrabold tracking-tight text-slate-900">
+            Engineered for Creators & Sellers
           </h2>
-          <p className="text-sm text-zinc-400">
-            A privacy-first, zero-cost architecture designed for modern workflows.
+          <p className="text-sm sm:text-base text-slate-600">
+            A privacy-first, zero-cost architecture designed for modern e-commerce and creative workflows.
           </p>
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3.5">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
           {features.map((feature) => {
             const Icon = feature.icon;
             return (
               <div
                 key={feature.title}
-                className="rounded-xl border border-zinc-800 bg-zinc-900/40 p-4 space-y-2 hover:border-zinc-700 transition-colors"
+                className="rounded-2xl border border-slate-200 bg-white p-5 space-y-2.5 shadow-2xs hover:border-slate-300 transition-colors"
               >
-                <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-zinc-800 text-blue-400">
-                  <Icon className="h-4 w-4" />
+                <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-blue-50 text-blue-600">
+                  <Icon className="h-5 w-5" />
                 </div>
-                <h3 className="text-sm font-semibold text-zinc-200">
+                <h3 className="text-base font-bold text-slate-900">
                   {feature.title}
                 </h3>
-                <p className="text-xs text-zinc-400 leading-relaxed">
+                <p className="text-xs sm:text-sm text-slate-600 leading-relaxed">
                   {feature.description}
                 </p>
               </div>

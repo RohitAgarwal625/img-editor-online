@@ -49,18 +49,18 @@ export function FAQSection() {
   };
 
   return (
-    <section id="faq" className="py-14 border-b border-zinc-800/60 bg-zinc-950">
+    <section id="faq" className="py-16 border-b border-slate-200 bg-slate-50">
       <div className="mx-auto max-w-3xl px-4 sm:px-6">
-        <div className="text-center mb-10 space-y-2">
-          <h2 className="text-2xl sm:text-3xl font-bold tracking-tight text-zinc-100">
+        <div className="text-center mb-12 space-y-2">
+          <h2 className="text-2xl sm:text-3xl font-extrabold tracking-tight text-slate-900">
             Frequently Asked Questions
           </h2>
-          <p className="text-sm text-zinc-400">
+          <p className="text-sm sm:text-base text-slate-600">
             Common questions about browser-based AI background removal.
           </p>
         </div>
 
-        <div className="rounded-xl border border-zinc-800 bg-zinc-900/40 divide-y divide-zinc-800">
+        <div className="rounded-2xl border border-slate-200 bg-white divide-y divide-slate-100 shadow-xs">
           {FAQS.map((faq, idx) => {
             const isOpen = openIndex === idx;
             return (
@@ -70,19 +70,19 @@ export function FAQSection() {
                   onClick={() => toggle(idx)}
                   aria-expanded={isOpen}
                   aria-controls={`faq-answer-${idx}`}
-                  className="w-full flex items-center justify-between p-4 text-left font-medium text-zinc-200 hover:text-white transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500"
+                  className="w-full flex items-center justify-between p-5 text-left font-bold text-slate-900 hover:text-blue-600 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-600"
                 >
-                  <span className="text-sm pr-4">{faq.question}</span>
+                  <span className="text-sm sm:text-base pr-4">{faq.question}</span>
                   <ChevronDown
-                    className={`h-4 w-4 text-zinc-400 shrink-0 transition-transform duration-200 ${
-                      isOpen ? "rotate-180" : ""
+                    className={`h-5 w-5 text-slate-400 shrink-0 transition-transform duration-200 ${
+                      isOpen ? "rotate-180 text-blue-600" : ""
                     }`}
                   />
                 </button>
                 {isOpen && (
                   <div
                     id={`faq-answer-${idx}`}
-                    className="px-4 pb-4 pt-1 text-xs sm:text-sm text-zinc-400 leading-relaxed"
+                    className="px-5 pb-5 pt-1 text-sm text-slate-600 leading-relaxed border-t border-slate-50"
                   >
                     {faq.answer}
                   </div>

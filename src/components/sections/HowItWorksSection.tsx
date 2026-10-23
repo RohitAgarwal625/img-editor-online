@@ -12,53 +12,53 @@ export function HowItWorksSection() {
     },
     {
       number: "02",
-      title: "Local Neural Segmentation",
+      title: "In-Browser AI Removal",
       description:
-        "The ISNet ONNX model runs locally in your browser via multi-threaded WebAssembly. No files are uploaded to any external server.",
+        "The ISNet neural network runs locally in your browser via multi-threaded WebAssembly. No files are uploaded to any external server.",
       icon: Cpu,
     },
     {
       number: "03",
       title: "Recolor & Export",
       description:
-        "Keep the transparent alpha channel, composite onto pure white for e-commerce listings, or apply custom colors. Download in full HD resolution.",
+        "Keep the transparent alpha channel, composite onto pure white for Amazon/Shopify e-commerce listings, or apply custom colors. Download in full HD.",
       icon: Palette,
     },
   ];
 
   return (
-    <section id="how-it-works" className="py-14 border-b border-zinc-800/60 bg-zinc-950">
+    <section id="how-it-works" className="py-16 border-b border-slate-200 bg-white">
       <div className="mx-auto max-w-5xl px-4 sm:px-6">
-        <div className="text-center max-w-2xl mx-auto mb-10 space-y-2">
-          <h2 className="text-2xl sm:text-3xl font-bold tracking-tight text-zinc-100">
+        <div className="text-center max-w-2xl mx-auto mb-12 space-y-2">
+          <h2 className="text-2xl sm:text-3xl font-extrabold tracking-tight text-slate-900">
             How It Works
           </h2>
-          <p className="text-sm text-zinc-400">
+          <p className="text-sm sm:text-base text-slate-600">
             Three simple steps to studio-grade cutouts right in your browser.
           </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           {steps.map((step) => {
             const Icon = step.icon;
             return (
               <div
                 key={step.number}
-                className="rounded-xl border border-zinc-800 bg-zinc-900/40 p-5 space-y-3"
+                className="rounded-2xl border border-slate-200 bg-slate-50/60 p-6 space-y-3 shadow-2xs hover:border-slate-300 transition-colors"
               >
                 <div className="flex items-center justify-between">
-                  <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-zinc-800 border border-zinc-700 text-blue-400">
-                    <Icon className="h-4 w-4" />
+                  <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-blue-50 border border-blue-200 text-blue-600">
+                    <Icon className="h-5 w-5" />
                   </div>
-                  <span className="font-mono text-xs font-semibold text-zinc-500">
+                  <span className="font-mono text-xs font-bold text-slate-400">
                     STEP {step.number}
                   </span>
                 </div>
 
-                <h3 className="text-sm font-semibold text-zinc-200">
+                <h3 className="text-base font-bold text-slate-900">
                   {step.title}
                 </h3>
-                <p className="text-xs text-zinc-400 leading-relaxed">
+                <p className="text-xs sm:text-sm text-slate-600 leading-relaxed">
                   {step.description}
                 </p>
               </div>

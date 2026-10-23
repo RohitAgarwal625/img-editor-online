@@ -14,7 +14,7 @@ export function BeforeAfterSlider({
   originalUrl,
   resultUrl,
   backgroundColor = "transparent",
-  checkerboardClass = "checkerboard-dark",
+  checkerboardClass = "checkerboard-pattern",
   altText = "Before and after comparison",
 }: BeforeAfterSliderProps) {
   const [sliderPosition, setSliderPosition] = useState<number>(50); // percentage 0 - 100
@@ -108,7 +108,7 @@ export function BeforeAfterSlider({
       onKeyDown={handleKeyDown}
       onMouseDown={() => setIsDragging(true)}
       onTouchStart={() => setIsDragging(true)}
-      className="relative w-full max-w-4xl mx-auto h-[360px] sm:h-[460px] md:h-[520px] rounded-xl overflow-hidden select-none border border-zinc-800 bg-zinc-950 shadow-lg cursor-ew-resize focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500"
+      className="relative w-full max-w-4xl mx-auto h-[380px] sm:h-[480px] md:h-[540px] rounded-2xl overflow-hidden select-none border border-slate-200 bg-white shadow-md cursor-ew-resize focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-600"
     >
       {/* Background (Processed result) layer with transparency pattern or color */}
       <div
@@ -122,16 +122,16 @@ export function BeforeAfterSlider({
         <img
           src={resultUrl}
           alt={`Result: ${altText}`}
-          className="w-full h-full object-contain pointer-events-none p-2 sm:p-4"
+          className="w-full h-full object-contain pointer-events-none p-4"
         />
-        <div className="absolute top-3 right-3 z-10 pointer-events-none rounded bg-zinc-950/80 px-2 py-0.5 text-[11px] font-medium text-emerald-400 border border-zinc-800">
+        <div className="absolute top-3 right-3 z-10 pointer-events-none rounded bg-white/90 px-2 py-0.5 text-[11px] font-bold text-emerald-700 shadow-2xs border border-emerald-200">
           Removed Background
         </div>
       </div>
 
       {/* Foreground (Original) layer clipped by slider position */}
       <div
-        className="absolute inset-0 w-full h-full overflow-hidden bg-zinc-950 pointer-events-none"
+        className="absolute inset-0 w-full h-full overflow-hidden bg-slate-100 pointer-events-none"
         style={{ width: `${sliderPosition}%` }}
       >
         <div
@@ -141,23 +141,23 @@ export function BeforeAfterSlider({
           <img
             src={originalUrl}
             alt={`Original: ${altText}`}
-            className="w-full h-full object-contain pointer-events-none p-2 sm:p-4"
+            className="w-full h-full object-contain pointer-events-none p-4"
           />
         </div>
-        <div className="absolute top-3 left-3 z-10 pointer-events-none rounded bg-zinc-950/80 px-2 py-0.5 text-[11px] font-medium text-zinc-300 border border-zinc-800">
+        <div className="absolute top-3 left-3 z-10 pointer-events-none rounded bg-slate-900/80 px-2 py-0.5 text-[11px] font-bold text-white shadow-2xs">
           Original
         </div>
       </div>
 
       {/* Hairline Divider & Precision Handle */}
       <div
-        className="absolute top-0 bottom-0 z-20 w-0.5 bg-white shadow-[0_0_10px_rgba(0,0,0,0.7)] pointer-events-none"
+        className="absolute top-0 bottom-0 z-20 w-0.5 bg-white shadow-md pointer-events-none"
         style={{ left: `${sliderPosition}%` }}
       >
-        <div className="absolute top-1/2 -translate-y-1/2 -translate-x-1/2 flex h-8 w-5 items-center justify-center rounded-full bg-white text-zinc-900 shadow-md border border-zinc-300">
+        <div className="absolute top-1/2 -translate-y-1/2 -translate-x-1/2 flex h-8 w-5 items-center justify-center rounded-full bg-white text-slate-800 shadow-md border border-slate-300">
           <div className="flex gap-0.5">
-            <div className="h-3 w-0.5 bg-zinc-600 rounded-full" />
-            <div className="h-3 w-0.5 bg-zinc-600 rounded-full" />
+            <div className="h-3 w-0.5 bg-slate-400 rounded-full" />
+            <div className="h-3 w-0.5 bg-slate-400 rounded-full" />
           </div>
         </div>
       </div>

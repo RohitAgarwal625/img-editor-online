@@ -4,7 +4,6 @@ import React, { useState, useCallback, useRef } from "react";
 import { Navbar } from "@/components/layout/Navbar";
 import { Footer } from "@/components/layout/Footer";
 import { HeroSection } from "@/components/sections/HeroSection";
-import { BeforeAfterDemo } from "@/components/sections/BeforeAfterDemo";
 import { HowItWorksSection } from "@/components/sections/HowItWorksSection";
 import { FeaturesSection } from "@/components/sections/FeaturesSection";
 import { FormatsSection } from "@/components/sections/FormatsSection";
@@ -99,23 +98,8 @@ export default function Home() {
     window.scrollTo({ top: 0, behavior: "smooth" });
   }, [appState]);
 
-  // Handler for demo section sample selection
-  const handleSelectDemoSample = useCallback(
-    async (sampleUrl: string, sampleName: string) => {
-      try {
-        const res = await fetch(sampleUrl);
-        const blob = await res.blob();
-        const file = new File([blob], sampleName, { type: "image/jpeg" });
-        handleStartRemoval(file);
-      } catch (err) {
-        console.error("Failed to load demo sample", err);
-      }
-    },
-    [handleStartRemoval]
-  );
-
   return (
-    <div className="min-h-screen flex flex-col bg-zinc-950 text-zinc-100 selection:bg-blue-600 selection:text-white">
+    <div className="min-h-screen flex flex-col bg-slate-50 text-slate-900 selection:bg-blue-600 selection:text-white">
       {/* Navbar with dynamic action based on state */}
       <Navbar
         showReset={appState.phase === "result" || appState.phase === "error"}
@@ -149,24 +133,24 @@ export default function Home() {
 
         {/* Error State */}
         {appState.phase === "error" && (
-          <div className="min-h-[calc(100vh-3.5rem)] flex items-center justify-center p-4">
-            <div className="max-w-md w-full rounded-xl bg-zinc-900 border border-zinc-800 p-6 text-center space-y-4 shadow-xl">
-              <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-lg bg-red-950/60 border border-red-800/60 text-red-400">
-                <AlertCircle className="h-6 w-6" />
+          <div className="min-h-[calc(100vh-4rem)] flex items-center justify-center p-4 bg-slate-50">
+            <div className="max-w-md w-full rounded-2xl bg-white border border-red-200 p-8 text-center space-y-5 shadow-md">
+              <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl bg-red-50 text-red-600 border border-red-100">
+                <AlertCircle className="h-7 w-7" />
               </div>
               <div className="space-y-1.5">
-                <h3 className="text-base font-bold text-zinc-100">Processing Failed</h3>
-                <p className="text-xs text-zinc-400 leading-relaxed">
+                <h3 className="text-lg font-bold text-slate-900">Background Removal Failed</h3>
+                <p className="text-xs sm:text-sm text-slate-600 leading-relaxed">
                   {appState.message}
                 </p>
               </div>
               <button
                 type="button"
                 onClick={handleResetToIdle}
-                className="w-full flex items-center justify-center gap-2 rounded-lg bg-blue-600 hover:bg-blue-500 text-white font-medium py-2.5 px-4 text-xs transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500"
+                className="w-full flex items-center justify-center gap-2 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-4 text-sm transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 shadow-sm"
               >
-                <RotateCcw className="h-3.5 w-3.5" />
-                <span>Upload Another Image</span>
+                <RotateCcw className="h-4 w-4" />
+                <span>Upload Another Photo</span>
               </button>
             </div>
           </div>
@@ -176,7 +160,6 @@ export default function Home() {
         {appState.phase === "idle" && (
           <>
             <HeroSection onFileSelected={handleStartRemoval} />
-            <BeforeAfterDemo onSelectSample={handleSelectDemoSample} />
             <HowItWorksSection />
             <FeaturesSection />
             <FormatsSection />

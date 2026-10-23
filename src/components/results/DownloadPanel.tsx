@@ -81,17 +81,17 @@ export function DownloadPanel({
   };
 
   return (
-    <div className="space-y-4 rounded-xl border border-zinc-800 bg-zinc-900/90 p-4 shadow-sm">
+    <div className="space-y-4 rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
       {/* File & Dimension Stats */}
-      <div className="flex items-center justify-between text-xs pb-3 border-b border-zinc-800/80">
-        <div className="flex items-center gap-1.5 text-zinc-300 font-medium truncate max-w-[180px]">
-          <FileImage className="h-3.5 w-3.5 text-zinc-400 shrink-0" />
+      <div className="flex items-center justify-between text-xs pb-3 border-b border-slate-100">
+        <div className="flex items-center gap-1.5 text-slate-700 font-semibold truncate max-w-[180px]">
+          <FileImage className="h-4 w-4 text-blue-600 shrink-0" />
           <span className="truncate" title={originalFile.name}>
             {originalFile.name}
           </span>
         </div>
-        <div className="flex items-center gap-2 text-zinc-400 font-mono text-[11px]">
-          <span>{dimensions.width}×{dimensions.height}</span>
+        <div className="flex items-center gap-2 text-slate-500 font-mono text-[11px]">
+          <span>{dimensions.width} × {dimensions.height}</span>
           <span>•</span>
           <span>{formatBytes(resultBlob.size)}</span>
         </div>
@@ -99,48 +99,48 @@ export function DownloadPanel({
 
       {/* Format Selector */}
       <div className="space-y-1.5">
-        <label className="text-xs font-semibold uppercase tracking-wider text-zinc-400">
-          Format
+        <label className="text-xs font-bold uppercase tracking-wider text-slate-700">
+          Export Format
         </label>
         <div className="grid grid-cols-2 gap-2">
           <button
             type="button"
             onClick={() => setSelectedFormat("image/png")}
             aria-pressed={selectedFormat === "image/png"}
-            className={`flex flex-col items-start rounded-lg p-2 text-left border transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 ${
+            className={`flex flex-col items-start rounded-xl p-3 text-left border transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 ${
               selectedFormat === "image/png"
-                ? "bg-blue-600/10 border-blue-500 text-white"
-                : "bg-zinc-800/40 border-zinc-700/60 text-zinc-300 hover:bg-zinc-800"
+                ? "bg-blue-50 border-blue-600 text-blue-950 shadow-2xs"
+                : "bg-slate-50 border-slate-200 text-slate-700 hover:bg-slate-100"
             }`}
           >
-            <span className="text-xs font-semibold">PNG</span>
-            <span className="text-[10px] text-zinc-400">Lossless & Alpha</span>
+            <span className="text-xs font-bold">PNG</span>
+            <span className="text-[11px] text-slate-500">Lossless & Alpha</span>
           </button>
           <button
             type="button"
             onClick={() => setSelectedFormat("image/webp")}
             aria-pressed={selectedFormat === "image/webp"}
-            className={`flex flex-col items-start rounded-lg p-2 text-left border transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 ${
+            className={`flex flex-col items-start rounded-xl p-3 text-left border transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 ${
               selectedFormat === "image/webp"
-                ? "bg-blue-600/10 border-blue-500 text-white"
-                : "bg-zinc-800/40 border-zinc-700/60 text-zinc-300 hover:bg-zinc-800"
+                ? "bg-blue-50 border-blue-600 text-blue-950 shadow-2xs"
+                : "bg-slate-50 border-slate-200 text-slate-700 hover:bg-slate-100"
             }`}
           >
-            <span className="text-xs font-semibold">WebP</span>
-            <span className="text-[10px] text-zinc-400">Smaller file size</span>
+            <span className="text-xs font-bold">WebP</span>
+            <span className="text-[11px] text-slate-500">Smaller file size</span>
           </button>
         </div>
       </div>
 
       {/* Action Buttons */}
-      <div className="space-y-2 pt-1">
+      <div className="space-y-2.5 pt-1">
         {/* Primary Download Button */}
         <button
           type="button"
           disabled={isExporting}
           onClick={handleDownload}
           id="btn-download-result"
-          className="w-full flex items-center justify-center gap-2 rounded-lg bg-blue-600 hover:bg-blue-500 disabled:opacity-50 text-white font-medium py-2.5 px-4 text-xs sm:text-sm shadow-sm transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-400"
+          className="w-full flex items-center justify-center gap-2 rounded-xl bg-blue-600 hover:bg-blue-700 disabled:opacity-50 text-white font-bold py-3.5 px-4 text-sm shadow-md shadow-blue-600/20 transition-all hover:scale-101 active:scale-98 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-600"
         >
           {isExporting ? (
             <>
@@ -149,10 +149,10 @@ export function DownloadPanel({
             </>
           ) : (
             <>
-              <Download className="h-4 w-4" />
+              <Download className="h-4 w-4 stroke-[2.5]" />
               <span>
                 Download {selectedFormat === "image/webp" ? "WebP" : "PNG"}
-                {isColored ? " (Solid BG)" : " (Cutout)"}
+                {isColored ? " (Solid BG)" : " (Transparent)"}
               </span>
             </>
           )}
@@ -164,24 +164,24 @@ export function DownloadPanel({
           disabled={isExporting}
           onClick={handleCopyToClipboard}
           id="btn-copy-clipboard"
-          className="w-full flex items-center justify-center gap-2 rounded-lg border border-zinc-700 bg-zinc-800/80 hover:bg-zinc-700 text-zinc-200 hover:text-white font-medium py-2 px-3 text-xs transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500"
+          className="w-full flex items-center justify-center gap-2 rounded-xl border border-slate-300 bg-slate-50 hover:bg-slate-100 text-slate-800 font-semibold py-2.5 px-3 text-xs sm:text-sm transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-600"
         >
           {copied ? (
             <>
-              <Check className="h-3.5 w-3.5 text-emerald-400" />
-              <span className="text-emerald-300 font-semibold">Copied to Clipboard!</span>
+              <Check className="h-4 w-4 text-emerald-600" />
+              <span className="text-emerald-800 font-bold">Copied to Clipboard!</span>
             </>
           ) : (
             <>
-              <Copy className="h-3.5 w-3.5 text-zinc-400" />
-              <span>Copy Image to Clipboard</span>
+              <Copy className="h-4 w-4 text-slate-500" />
+              <span>Copy to Clipboard</span>
             </>
           )}
         </button>
       </div>
 
-      <div className="text-center text-[10px] text-zinc-500 pt-1">
-        Full Resolution • No Watermarks • Free for Commercial Use
+      <div className="text-center text-[11px] font-medium text-slate-500 pt-1">
+        Full Original Resolution • No Watermark • 100% Free
       </div>
     </div>
   );
