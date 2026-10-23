@@ -43,7 +43,7 @@ body {
   background-color: #1e293b;
 }
 
-/* Focus and input styling */
+/* Range input styling */
 input[type="range"] {
   accent-color: #2563eb;
 }
