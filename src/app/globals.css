@@ -132,7 +132,7 @@ input[type="range"] {
   background: var(--primitive-slate-400);
 }
 
-/* Scanline laser animation for upload feedback */
+/* Scanline laser animation (legacy fallback) */
 @keyframes scanline {
   0% { transform: translateY(-100%); }
   100% { transform: translateY(1000%); }
@@ -141,6 +141,61 @@ input[type="range"] {
 .animate-scanline {
   animation: scanline 2.5s cubic-bezier(0.4, 0, 0.2, 1) infinite;
 }
+
+/* 4. MODERN WAVY GRADIENT & NEURAL DOTS ANIMATIONS */
+@keyframes waveGradient {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+.animate-wavy-gradient {
+  background: linear-gradient(
+    -45deg,
+    rgba(37, 99, 235, 0.28),
+    rgba(147, 51, 234, 0.35),
+    rgba(16, 185, 129, 0.25),
+    rgba(56, 189, 248, 0.3)
+  );
+  background-size: 300% 300%;
+  animation: waveGradient 6s ease infinite;
+}
+
+@keyframes dotsDrift {
+  0% { background-position: 0 0; }
+  100% { background-position: 28px 28px; }
+}
+
+.neural-dots-pattern {
+  background-image: radial-gradient(circle, rgba(37, 99, 235, 0.4) 1.5px, transparent 1.5px);
+  background-size: 20px 20px;
+  animation: dotsDrift 8s linear infinite;
+}
+
+@keyframes pulseBreathe {
+  0%, 100% {
+    transform: scale(1);
+    filter: drop-shadow(0 4px 20px rgba(37, 99, 235, 0.2));
+  }
+  50% {
+    transform: scale(1.02);
+    filter: drop-shadow(0 8px 32px rgba(147, 51, 234, 0.35));
+  }
+}
+
+.animate-pulse-breathe {
+  animation: pulseBreathe 3.5s ease-in-out infinite;
+}
+
+@keyframes waveOscillate {
+  0%, 100% { transform: translateY(0px) scaleY(1); }
+  50% { transform: translateY(-8px) scaleY(1.15); }
+}
+
+.animate-wave-oscillate {
+  animation: waveOscillate 4s ease-in-out infinite;
+}
+
 
 /* Subtle glow effect */
 .glow-primary {

@@ -13,6 +13,7 @@ const HERO_DEMOS = [
     id: "person",
     name: "People",
     url: "/samples/sample-person.jpg",
+    cutoutUrl: "/samples/sample-person-cutout.png",
     icon: User,
     desc: "Hair & silhouette isolation",
   },
@@ -20,6 +21,7 @@ const HERO_DEMOS = [
     id: "product",
     name: "Products",
     url: "/samples/sample-product.jpg",
+    cutoutUrl: "/samples/sample-product-cutout.png",
     icon: ShoppingBag,
     desc: "Clean marketplace cutouts",
   },
@@ -27,6 +29,7 @@ const HERO_DEMOS = [
     id: "animal",
     name: "Animals",
     url: "/samples/sample-animal.jpg",
+    cutoutUrl: "/samples/sample-animal-cutout.png",
     icon: Dog,
     desc: "Complex fur and soft edges",
   },
@@ -100,37 +103,38 @@ export function HeroSection({ onFileSelected }: HeroSectionProps) {
               </div>
 
               {/* Slider Visual */}
-              <div className="relative h-60 sm:h-72 w-full rounded-xl overflow-hidden select-none border border-slate-200 bg-slate-100">
-                {/* Background Cutout on Checkerboard */}
+              <div className="relative h-64 sm:h-72 md:h-80 w-full rounded-xl overflow-hidden select-none border border-slate-200 bg-white shadow-inner">
+                {/* 1. Background Cutout on Checkerboard */}
                 <div className="absolute inset-0 w-full h-full flex items-center justify-center checkerboard-pattern">
                   <img
-                    src={activeDemo.url}
+                    src={activeDemo.cutoutUrl}
                     alt={`${activeDemo.name} cutout preview`}
-                    className="w-full h-full object-contain filter drop-shadow-[0_8px_16px_rgba(0,0,0,0.25)] p-2"
+                    className="w-full h-full object-contain filter drop-shadow-[0_8px_20px_rgba(0,0,0,0.18)] p-3 select-none pointer-events-none"
                   />
-                  <div className="absolute top-2 right-2 rounded bg-white/90 backdrop-blur-xs px-2 py-0.5 text-[10px] font-bold text-emerald-700 shadow-2xs border border-emerald-200">
+                  <div className="absolute top-2.5 right-2.5 rounded-full bg-white/95 backdrop-blur-xs px-2.5 py-0.5 text-[10px] font-extrabold text-emerald-700 shadow-2xs border border-emerald-200">
                     Transparent Cutout
                   </div>
                 </div>
 
-                {/* Foreground Original */}
+                {/* 2. Foreground Original (Clipped with inset to keep image stationary) */}
                 <div
-                  className="absolute inset-0 w-full h-full overflow-hidden bg-slate-100 pointer-events-none"
-                  style={{ width: `${sliderPos}%` }}
+                  className="absolute inset-0 w-full h-full flex items-center justify-center bg-slate-100 pointer-events-none"
+                  style={{
+                    clipPath: `inset(0 ${100 - sliderPos}% 0 0)`,
+                    WebkitClipPath: `inset(0 ${100 - sliderPos}% 0 0)`,
+                  }}
                 >
-                  <div className="absolute inset-0 w-full h-full flex items-center justify-center">
-                    <img
-                      src={activeDemo.url}
-                      alt={`${activeDemo.name} original`}
-                      className="w-full h-full object-contain p-2"
-                    />
-                  </div>
-                  <div className="absolute top-2 left-2 rounded bg-slate-900/80 px-2 py-0.5 text-[10px] font-bold text-white shadow-2xs">
+                  <img
+                    src={activeDemo.url}
+                    alt={`${activeDemo.name} original`}
+                    className="w-full h-full object-contain p-3 select-none pointer-events-none"
+                  />
+                  <div className="absolute top-2.5 left-2.5 rounded-full bg-slate-900/85 px-2.5 py-0.5 text-[10px] font-extrabold text-white shadow-2xs">
                     Original
                   </div>
                 </div>
 
-                {/* Range Input for accessibility and drag */}
+                {/* 3. Range Input for slider dragging */}
                 <input
                   type="range"
                   min="0"
@@ -141,15 +145,15 @@ export function HeroSection({ onFileSelected }: HeroSectionProps) {
                   aria-label="Before and after split slider"
                 />
 
-                {/* Hairline Divider & Pill */}
+                {/* 4. Hairline Divider & Directional Handle */}
                 <div
                   className="absolute top-0 bottom-0 z-20 w-0.5 bg-white shadow-md pointer-events-none"
                   style={{ left: `${sliderPos}%` }}
                 >
-                  <div className="absolute top-1/2 -translate-y-1/2 -translate-x-1/2 flex h-6 w-4 items-center justify-center rounded-full bg-white text-slate-700 shadow-md border border-slate-300">
-                    <div className="flex gap-0.5">
-                      <div className="h-2 w-0.5 bg-slate-400 rounded-full" />
-                      <div className="h-2 w-0.5 bg-slate-400 rounded-full" />
+                  <div className="absolute top-1/2 -translate-y-1/2 -translate-x-1/2 flex h-8 w-8 items-center justify-center rounded-full bg-white text-slate-700 shadow-lg border border-slate-300">
+                    <div className="flex items-center gap-0.5 text-[9px] font-extrabold text-slate-500 select-none">
+                      <span>◀</span>
+                      <span>▶</span>
                     </div>
                   </div>
                 </div>
