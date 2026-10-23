@@ -142,74 +142,130 @@ input[type="range"] {
   animation: scanline 2.5s cubic-bezier(0.4, 0, 0.2, 1) infinite;
 }
 
-/* 4. EXPANDED FLUID WAVY GRADIENT & NEURAL DOTS ANIMATIONS */
-@keyframes fluidWaveRotate1 {
-  0% { transform: scale(1.1) rotate(0deg) translate(0%, 0%); }
-  33% { transform: scale(1.3) rotate(120deg) translate(8%, -6%); }
-  66% { transform: scale(0.95) rotate(240deg) translate(-8%, 6%); }
-  100% { transform: scale(1.1) rotate(360deg) translate(0%, 0%); }
+/* --------------------------------------------------
+   4. CHATGPT-STYLE LIQUID WAVY TRANSFORMATION ANIMATION
+   -------------------------------------------------- */
+
+/* Smooth organic morphing liquid wave blob */
+@keyframes liquidAuroraMorph {
+  0% {
+    border-radius: 38% 62% 63% 37% / 41% 44% 56% 59%;
+    transform: rotate(0deg) scale(1.05);
+  }
+  33% {
+    border-radius: 65% 35% 45% 55% / 55% 38% 62% 45%;
+    transform: rotate(120deg) scale(1.2);
+  }
+  66% {
+    border-radius: 35% 65% 70% 30% / 45% 65% 35% 55%;
+    transform: rotate(240deg) scale(0.95);
+  }
+  100% {
+    border-radius: 38% 62% 63% 37% / 41% 44% 56% 59%;
+    transform: rotate(360deg) scale(1.05);
+  }
 }
 
-@keyframes fluidWaveRotate2 {
-  0% { transform: scale(1.2) rotate(360deg) translate(-6%, 6%); }
-  50% { transform: scale(0.9) rotate(180deg) translate(6%, -8%); }
-  100% { transform: scale(1.2) rotate(0deg) translate(-6%, 6%); }
-}
-
-.fluid-wave-layer-1 {
-  background: radial-gradient(circle at 25% 25%, rgba(37, 99, 235, 0.65), transparent 55%),
-              radial-gradient(circle at 75% 75%, rgba(147, 51, 234, 0.6), transparent 55%),
-              radial-gradient(circle at 15% 85%, rgba(16, 185, 129, 0.5), transparent 50%),
-              radial-gradient(circle at 85% 15%, rgba(56, 189, 248, 0.6), transparent 50%);
+.chatgpt-wavy-aurora {
+  background: linear-gradient(
+    135deg,
+    rgba(37, 99, 235, 0.65) 0%,
+    rgba(147, 51, 234, 0.6) 25%,
+    rgba(236, 72, 153, 0.55) 50%,
+    rgba(6, 182, 212, 0.6) 75%,
+    rgba(59, 130, 246, 0.65) 100%
+  );
   filter: blur(55px);
-  animation: fluidWaveRotate1 14s ease-in-out infinite;
+  animation: liquidAuroraMorph 10s ease-in-out infinite;
 }
 
-.fluid-wave-layer-2 {
-  background: radial-gradient(circle at 65% 35%, rgba(236, 72, 153, 0.5), transparent 55%),
-              radial-gradient(circle at 35% 65%, rgba(59, 130, 246, 0.65), transparent 55%),
-              radial-gradient(circle at 85% 85%, rgba(139, 92, 246, 0.55), transparent 50%);
+.chatgpt-wavy-aurora-secondary {
+  background: linear-gradient(
+    -45deg,
+    rgba(99, 102, 241, 0.55) 0%,
+    rgba(16, 185, 129, 0.45) 35%,
+    rgba(217, 70, 239, 0.55) 70%,
+    rgba(14, 165, 233, 0.6) 100%
+  );
   filter: blur(65px);
-  animation: fluidWaveRotate2 16s ease-in-out infinite;
+  animation: liquidAuroraMorph 14s ease-in-out infinite reverse;
 }
 
-@keyframes neuralDotsFlow {
-  0% { background-position: 0 0, 0 0; }
-  100% { background-position: 56px 56px, -56px 56px; }
+/* ChatGPT diagonal liquid wave sweep across image */
+@keyframes chatgptWaveSweep {
+  0% {
+    transform: translateX(-160%) skewX(-20deg);
+    opacity: 0;
+  }
+  15% {
+    opacity: 0.8;
+  }
+  85% {
+    opacity: 0.8;
+  }
+  100% {
+    transform: translateX(260%) skewX(-20deg);
+    opacity: 0;
+  }
 }
 
-.neural-dots-mesh {
-  background-image: 
-    radial-gradient(circle, rgba(56, 189, 248, 0.85) 1.5px, transparent 2px),
-    radial-gradient(circle, rgba(168, 85, 247, 0.65) 2px, transparent 2.5px);
-  background-size: 28px 28px, 56px 56px;
-  animation: neuralDotsFlow 12s linear infinite;
+.animate-chatgpt-sweep {
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(255, 255, 255, 0.05) 15%,
+    rgba(56, 189, 248, 0.4) 30%,
+    rgba(168, 85, 247, 0.5) 50%,
+    rgba(255, 255, 255, 0.8) 54%,
+    rgba(6, 182, 212, 0.45) 68%,
+    transparent 100%
+  );
+  animation: chatgptWaveSweep 3.2s cubic-bezier(0.4, 0, 0.2, 1) infinite;
 }
 
-@keyframes pulseBreathe {
+/* Continuous undulating liquid wave oscillation */
+@keyframes liquidWaveUndulate1 {
   0%, 100% {
-    transform: scale(1);
-    filter: drop-shadow(0 4px 25px rgba(37, 99, 235, 0.25));
+    transform: translateY(0px) scaleY(1);
   }
   50% {
-    transform: scale(1.025);
-    filter: drop-shadow(0 10px 40px rgba(147, 51, 234, 0.45));
+    transform: translateY(-22px) scaleY(1.35);
   }
 }
 
-.animate-pulse-breathe {
-  animation: pulseBreathe 4s ease-in-out infinite;
+@keyframes liquidWaveUndulate2 {
+  0%, 100% {
+    transform: translateY(-12px) scaleY(1.25);
+  }
+  50% {
+    transform: translateY(20px) scaleY(0.9);
+  }
 }
 
-@keyframes sineWaveDrift {
-  0% { transform: translateX(0%) scaleY(1); }
-  50% { transform: translateX(-25%) scaleY(1.25); }
-  100% { transform: translateX(-50%) scaleY(1); }
+.animate-liquid-wave-1 {
+  animation: liquidWaveUndulate1 4.5s ease-in-out infinite;
 }
 
-.animate-sine-drift {
-  animation: sineWaveDrift 10s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+.animate-liquid-wave-2 {
+  animation: liquidWaveUndulate2 5.5s ease-in-out infinite;
 }
+
+/* Pulsing ambient luminescence on the photo during transformation */
+@keyframes photoGlowTransform {
+  0%, 100% {
+    filter: drop-shadow(0 4px 20px rgba(37, 99, 235, 0.25)) brightness(1);
+    transform: scale(1);
+  }
+  50% {
+    filter: drop-shadow(0 10px 45px rgba(168, 85, 247, 0.5)) brightness(1.04);
+    transform: scale(1.02);
+  }
+}
+
+.animate-photo-transform {
+  animation: photoGlowTransform 4s ease-in-out infinite;
+}
+
 
 
 
