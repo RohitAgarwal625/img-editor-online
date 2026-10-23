@@ -1,7 +1,18 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import { ArrowLeft, Sliders, Columns, Eye, Grid, Image as ImageIcon, Sparkles } from "lucide-react";
+import {
+  ArrowLeft,
+  Sliders,
+  Columns,
+  Eye,
+  Grid,
+  Image as ImageIcon,
+  Sparkles,
+  ZoomIn,
+  ZoomOut,
+  RotateCcw,
+} from "lucide-react";
 import { BeforeAfterSlider } from "./BeforeAfterSlider";
 import { BackgroundColorPicker } from "./BackgroundColorPicker";
 import { DownloadPanel } from "./DownloadPanel";
@@ -28,8 +39,13 @@ export function ResultsWorkspace({
   const [viewMode, setViewMode] = useState<ViewMode>("result-only");
   const [backgroundColor, setBackgroundColor] = useState<string>("transparent");
   const [isDarkChecker, setIsDarkChecker] = useState<boolean>(false);
+  const [zoomLevel, setZoomLevel] = useState<number>(1);
 
   const checkerClass = isDarkChecker ? "checkerboard-dark" : "checkerboard-pattern";
+
+  const handleZoomIn = () => setZoomLevel((z) => Math.min(3, +(z + 0.25).toFixed(2)));
+  const handleZoomOut = () => setZoomLevel((z) => Math.max(0.5, +(z - 0.25).toFixed(2)));
+  const handleZoomReset = () => setZoomLevel(1);
 
   // Escape key resets to upload
   useEffect(() => {
@@ -132,8 +148,40 @@ export function ResultsWorkspace({
             </button>
           </div>
 
-          {/* Right: Grid Theme Toggle */}
+          {/* Right: Zoom & Grid Theme Controls */}
           <div className="flex items-center gap-2">
+            {/* Zoom Controls */}
+            <div className="flex items-center rounded-lg border border-slate-300 bg-white p-0.5 shadow-2xs">
+              <button
+                type="button"
+                onClick={handleZoomOut}
+                disabled={zoomLevel <= 0.5}
+                className="rounded p-1 text-slate-600 hover:text-slate-900 hover:bg-slate-100 disabled:opacity-40 transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-blue-600"
+                title="Zoom Out"
+                aria-label="Zoom Out"
+              >
+                <ZoomOut className="h-3.5 w-3.5" />
+              </button>
+              <button
+                type="button"
+                onClick={handleZoomReset}
+                className="px-2 py-0.5 text-[11px] font-mono font-semibold text-slate-700 hover:text-blue-600 transition-colors focus-visible:outline-none"
+                title="Reset zoom to 100%"
+              >
+                {Math.round(zoomLevel * 100)}%
+              </button>
+              <button
+                type="button"
+                onClick={handleZoomIn}
+                disabled={zoomLevel >= 3}
+                className="rounded p-1 text-slate-600 hover:text-slate-900 hover:bg-slate-100 disabled:opacity-40 transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-blue-600"
+                title="Zoom In"
+                aria-label="Zoom In"
+              >
+                <ZoomIn className="h-3.5 w-3.5" />
+              </button>
+            </div>
+
             {backgroundColor === "transparent" && (
               <button
                 type="button"
@@ -167,11 +215,14 @@ export function ResultsWorkspace({
                       backgroundColor !== "transparent" ? backgroundColor : undefined,
                   }}
                 />
-                <img
-                  src={resultUrl}
-                  alt="Background removed result"
-                  className="relative z-10 w-full h-full object-contain pointer-events-none p-4"
-                />
+                <div className="relative z-10 w-full h-full flex items-center justify-center overflow-hidden p-4">
+                  <img
+                    src={resultUrl}
+                    alt="Background removed result"
+                    style={{ transform: `scale(${zoomLevel})` }}
+                    className="w-full h-full object-contain pointer-events-none transition-transform duration-150 ease-out"
+                  />
+                </div>
                 <div className="absolute top-4 right-4 z-20 rounded-full bg-emerald-500 text-white px-3 py-1 text-xs font-bold shadow-sm flex items-center gap-1">
                   <Sparkles className="h-3.5 w-3.5" />
                   <span>Cutout Ready</span>

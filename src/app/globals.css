@@ -1,26 +1,94 @@
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;700&display=swap');
 @import "tailwindcss";
 
+/* --------------------------------------------------
+   1. THREE-LAYER DESIGN SYSTEM TOKENS (Design-System Skill)
+   -------------------------------------------------- */
+
 :root {
-  --background: #f8fafc;
-  --foreground: #0f172a;
-  --card: #ffffff;
-  --card-border: #e2e8f0;
-  --primary: #2563eb;
-  --primary-hover: #1d4ed8;
-  --muted: #64748b;
-  --muted-light: #f1f5f9;
+  /* Layer 1: Primitive Tokens */
+  --primitive-blue-50: #eff6ff;
+  --primitive-blue-100: #dbeafe;
+  --primitive-blue-500: #3b82f6;
+  --primitive-blue-600: #2563eb;
+  --primitive-blue-700: #1d4ed8;
+  --primitive-blue-800: #1e40af;
+  
+  --primitive-slate-50: #f8fafc;
+  --primitive-slate-100: #f1f5f9;
+  --primitive-slate-200: #e2e8f0;
+  --primitive-slate-300: #cbd5e1;
+  --primitive-slate-400: #94a3b8;
+  --primitive-slate-500: #64748b;
+  --primitive-slate-600: #475569;
+  --primitive-slate-700: #334155;
+  --primitive-slate-800: #1e293b;
+  --primitive-slate-900: #0f172a;
+
+  --primitive-emerald-50: #ecfdf5;
+  --primitive-emerald-200: #a7f3d0;
+  --primitive-emerald-600: #059669;
+  --primitive-emerald-700: #047857;
+
+  /* Layer 2: Semantic Tokens */
+  --bg-app: var(--primitive-slate-50);
+  --bg-card: #ffffff;
+  --bg-card-subtle: var(--primitive-slate-50);
+  --bg-muted: var(--primitive-slate-100);
+  
+  --text-main: var(--primitive-slate-900);
+  --text-body: var(--primitive-slate-600);
+  --text-muted: var(--primitive-slate-500);
+  --text-inverse: #ffffff;
+
+  --color-primary: var(--primitive-blue-600);
+  --color-primary-hover: var(--primitive-blue-700);
+  --color-primary-light: var(--primitive-blue-50);
+  --color-primary-border: var(--primitive-blue-100);
+  
+  --color-success: var(--primitive-emerald-600);
+  --color-success-light: var(--primitive-emerald-50);
+  --color-success-border: var(--primitive-emerald-200);
+
+  --border-card: var(--primitive-slate-200);
+  --border-subtle: rgba(226, 232, 240, 0.8);
+
+  --shadow-card: 0 4px 20px -2px rgba(15, 23, 42, 0.08), 0 2px 6px -1px rgba(15, 23, 42, 0.04);
+  --shadow-card-hover: 0 10px 30px -4px rgba(15, 23, 42, 0.12), 0 4px 10px -2px rgba(15, 23, 42, 0.06);
+  --shadow-button-primary: 0 4px 14px 0 rgba(37, 99, 235, 0.35);
+
+  --font-family-sans: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --font-family-mono: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+}
+
+/* --------------------------------------------------
+   2. GLOBAL RESET & BASE TYPOGRAPHY
+   -------------------------------------------------- */
+
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+  -webkit-text-size-adjust: 100%;
 }
 
 body {
-  background-color: #f8fafc;
-  color: #0f172a;
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  background-color: var(--bg-app);
+  color: var(--text-main);
+  font-family: var(--font-family-sans);
   overflow-x: hidden;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  line-height: 1.5;
 }
 
-/* Professional Photoshop standard transparency checkerboard (Light & Clean) */
+/* --------------------------------------------------
+   3. SPECIALIZED UI PATTERNS & UTILITIES (UI-UX-PRO-MAX)
+   -------------------------------------------------- */
+
+/* Clean transparency checkerboard pattern */
 .checkerboard-pattern {
   background-image: 
     linear-gradient(45deg, #cbd5e1 25%, transparent 25%),
@@ -29,7 +97,7 @@ body {
     linear-gradient(-45deg, transparent 75%, #cbd5e1 75%);
   background-size: 16px 16px;
   background-position: 0 0, 0 8px, 8px -8px, -8px 0px;
-  background-color: #f1f5f9;
+  background-color: #f8fafc;
 }
 
 .checkerboard-dark {
@@ -43,9 +111,9 @@ body {
   background-color: #1e293b;
 }
 
-/* Range input styling */
+/* Range input slider styling */
 input[type="range"] {
-  accent-color: #2563eb;
+  accent-color: var(--color-primary);
 }
 
 /* Custom minimal scrollbar */
@@ -54,17 +122,17 @@ input[type="range"] {
   height: 6px;
 }
 ::-webkit-scrollbar-track {
-  background: #f1f5f9;
+  background: var(--primitive-slate-100);
 }
 ::-webkit-scrollbar-thumb {
-  background: #cbd5e1;
-  border-radius: 3px;
+  background: var(--primitive-slate-300);
+  border-radius: 9999px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: #94a3b8;
+  background: var(--primitive-slate-400);
 }
 
-/* Scanline animation */
+/* Scanline laser animation for upload feedback */
 @keyframes scanline {
   0% { transform: translateY(-100%); }
   100% { transform: translateY(1000%); }
@@ -72,4 +140,14 @@ input[type="range"] {
 
 .animate-scanline {
   animation: scanline 2.5s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+}
+
+/* Subtle glow effect */
+.glow-primary {
+  box-shadow: 0 0 25px -5px rgba(37, 99, 235, 0.25);
+}
+
+/* Keyboard badge */
+kbd {
+  font-family: var(--font-family-mono);
 }
