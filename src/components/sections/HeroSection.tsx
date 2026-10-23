@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import { Sparkles, Zap, Lock } from "lucide-react";
+import { Zap, Lock, Sparkles } from "lucide-react";
 import { UploadZone } from "@/components/upload/UploadZone";
 
 interface HeroSectionProps {
@@ -10,64 +10,54 @@ interface HeroSectionProps {
 
 export function HeroSection({ onFileSelected }: HeroSectionProps) {
   return (
-    <section className="relative pt-12 pb-20 md:pt-16 md:pb-28 overflow-hidden">
-      {/* Background ambient lighting */}
-      <div className="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[400px] bg-gradient-to-tr from-indigo-600/15 via-violet-600/10 to-transparent blur-3xl pointer-events-none -z-10" />
-
-      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        {/* Hero Headings */}
-        <div className="text-center max-w-3xl mx-auto space-y-5 mb-10">
-          <div className="inline-flex items-center gap-2 rounded-full bg-indigo-500/10 border border-indigo-500/20 px-4 py-1.5 text-xs font-semibold text-indigo-300 backdrop-blur-sm">
-            <Sparkles className="h-3.5 w-3.5 text-indigo-400" />
-            <span>The Free, Private Alternative to Remove.bg</span>
+    <section className="pt-8 pb-14 md:pt-12 md:pb-16 border-b border-zinc-800/60">
+      <div className="mx-auto max-w-5xl px-4 sm:px-6">
+        {/* Crisp, content-first heading */}
+        <div className="text-center max-w-2xl mx-auto space-y-3 mb-8">
+          <div className="inline-flex items-center gap-1.5 rounded-md bg-zinc-800/80 border border-zinc-700/60 px-2.5 py-1 text-xs font-medium text-zinc-300">
+            <Sparkles className="h-3.5 w-3.5 text-blue-400" />
+            <span>Free Client-Side Alternative to remove.bg</span>
           </div>
 
-          <h1 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight text-white leading-[1.15]">
-            Remove Image Backgrounds{" "}
-            <span className="text-gradient-primary">Free with AI</span>
+          <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold tracking-tight text-zinc-100">
+            Remove image background in seconds
           </h1>
 
-          <p className="text-base sm:text-lg text-slate-300 max-w-2xl mx-auto leading-relaxed">
-            Instant, high-resolution background removal powered by in-browser neural networks. 
-            No sign-up required, zero watermarks, and your images never leave your computer.
+          <p className="text-sm sm:text-base text-zinc-400 leading-relaxed">
+            Automatic background removal powered by in-browser neural networks. 
+            No sign-up, zero watermarks, and your images never leave your computer.
           </p>
         </div>
 
-        {/* Upload Zone */}
+        {/* Upload Zone (The primary tool) */}
         <UploadZone onFileSelected={onFileSelected} />
 
-        {/* Value Proposition Grid / Stats Bar */}
-        <div className="mt-14 max-w-4xl mx-auto grid grid-cols-2 sm:grid-cols-4 gap-4 text-center">
-          <div className="rounded-2xl bg-slate-900/40 border border-slate-800/80 p-4 backdrop-blur-sm">
-            <div className="text-2xl font-bold text-white flex items-center justify-center gap-1">
-              <span>100%</span>
-              <span className="text-xs font-semibold text-emerald-400 uppercase">Free</span>
-            </div>
-            <p className="text-xs text-slate-400 mt-1">No subscriptions or credit limits</p>
+        {/* Value metrics strip */}
+        <div className="mt-10 max-w-3xl mx-auto grid grid-cols-2 sm:grid-cols-4 gap-3 text-center">
+          <div className="rounded-lg border border-zinc-800 bg-zinc-900/40 p-3">
+            <div className="text-sm font-semibold text-zinc-200">100% Free</div>
+            <div className="text-[11px] text-zinc-500 mt-0.5">No subscription limits</div>
           </div>
 
-          <div className="rounded-2xl bg-slate-900/40 border border-slate-800/80 p-4 backdrop-blur-sm">
-            <div className="text-2xl font-bold text-white flex items-center justify-center gap-1">
-              <Lock className="h-5 w-5 text-indigo-400 inline" />
+          <div className="rounded-lg border border-zinc-800 bg-zinc-900/40 p-3">
+            <div className="text-sm font-semibold text-zinc-200 flex items-center justify-center gap-1">
+              <Lock className="h-3.5 w-3.5 text-emerald-400" />
               <span>Private</span>
             </div>
-            <p className="text-xs text-slate-400 mt-1">Runs locally on device</p>
+            <div className="text-[11px] text-zinc-500 mt-0.5">Zero cloud uploads</div>
           </div>
 
-          <div className="rounded-2xl bg-slate-900/40 border border-slate-800/80 p-4 backdrop-blur-sm">
-            <div className="text-2xl font-bold text-white flex items-center justify-center gap-1">
-              <span>HD</span>
-              <span className="text-xs font-semibold text-indigo-400">Quality</span>
-            </div>
-            <p className="text-xs text-slate-400 mt-1">Full resolution without downscaling</p>
+          <div className="rounded-lg border border-zinc-800 bg-zinc-900/40 p-3">
+            <div className="text-sm font-semibold text-zinc-200">Full HD</div>
+            <div className="text-[11px] text-zinc-500 mt-0.5">Original pixel resolution</div>
           </div>
 
-          <div className="rounded-2xl bg-slate-900/40 border border-slate-800/80 p-4 backdrop-blur-sm">
-            <div className="text-2xl font-bold text-white flex items-center justify-center gap-1">
-              <Zap className="h-5 w-5 text-amber-400 inline" />
-              <span>Instant</span>
+          <div className="rounded-lg border border-zinc-800 bg-zinc-900/40 p-3">
+            <div className="text-sm font-semibold text-zinc-200 flex items-center justify-center gap-1">
+              <Zap className="h-3.5 w-3.5 text-amber-400" />
+              <span>WASM AI</span>
             </div>
-            <p className="text-xs text-slate-400 mt-1">Cached WebAssembly engine</p>
+            <div className="text-[11px] text-zinc-500 mt-0.5">Cached in browser</div>
           </div>
         </div>
       </div>

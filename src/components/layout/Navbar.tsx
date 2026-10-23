@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import { Sparkles, ShieldCheck, Zap, RotateCcw } from "lucide-react";
+import { Scissors, ShieldCheck, ArrowLeft, Plus } from "lucide-react";
 
 interface NavbarProps {
   onReset?: () => void;
@@ -10,44 +10,66 @@ interface NavbarProps {
 
 export function Navbar({ onReset, showReset }: NavbarProps) {
   return (
-    <header className="sticky top-0 z-50 w-full border-b border-slate-800/80 bg-slate-950/80 backdrop-blur-md">
-      <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
+    <header className="sticky top-0 z-50 w-full border-b border-zinc-800/80 bg-zinc-950/90 backdrop-blur-md">
+      <div className="mx-auto flex h-14 max-w-7xl items-center justify-between px-4 sm:px-6">
         {/* Brand */}
-        <div 
-          onClick={onReset}
-          className="flex items-center gap-2.5 cursor-pointer group transition-transform active:scale-95"
-        >
-          <div className="relative flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-tr from-indigo-600 via-indigo-500 to-violet-500 p-0.5 shadow-lg shadow-indigo-500/25 group-hover:shadow-indigo-500/40 transition-all duration-300">
-            <div className="flex h-full w-full items-center justify-center rounded-[10px] bg-slate-950/60 backdrop-blur-sm">
-              <Sparkles className="h-5 w-5 text-indigo-300 transition-transform group-hover:rotate-12" />
+        <div className="flex items-center gap-6">
+          <button
+            onClick={onReset}
+            className="flex items-center gap-2.5 text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 rounded-md py-1"
+            aria-label="RemoveBG Home"
+          >
+            <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-blue-600 text-white font-bold shadow-sm">
+              <Scissors className="h-4 w-4" />
             </div>
-          </div>
-          <div className="flex items-center gap-1.5">
-            <span className="text-xl font-bold tracking-tight text-white group-hover:text-indigo-200 transition-colors">
-              Remove<span className="text-indigo-400">BG</span>
-            </span>
-            <span className="rounded-md bg-indigo-500/10 px-1.5 py-0.5 text-[10px] font-semibold text-indigo-300 border border-indigo-500/20">
-              AI PRO
-            </span>
+            <div className="flex items-baseline gap-1.5">
+              <span className="text-base font-semibold tracking-tight text-zinc-100">
+                Remove<span className="text-blue-500">BG</span>
+              </span>
+              <span className="text-[10px] font-medium tracking-wide uppercase px-1.5 py-0.2 rounded bg-zinc-800 text-zinc-400 border border-zinc-700/60">
+                Studio
+              </span>
+            </div>
+          </button>
+
+          {/* Privacy badge */}
+          <div className="hidden sm:flex items-center gap-1.5 text-xs text-zinc-400 pl-3 border-l border-zinc-800">
+            <ShieldCheck className="h-3.5 w-3.5 text-emerald-500 shrink-0" />
+            <span>In-Browser Neural Engine (WASM)</span>
           </div>
         </div>
 
-        {/* Navigation Links (Hidden on small screens when in editor mode) */}
+        {/* Center / Navigation Links (only on landing page) */}
         {!showReset && (
-          <nav className="hidden md:flex items-center gap-8 text-sm font-medium text-slate-300">
-            <a href="#how-it-works" className="hover:text-white transition-colors">
-              How it Works
+          <nav className="hidden md:flex items-center gap-6 text-xs font-medium text-zinc-400">
+            <a
+              href="#upload"
+              className="hover:text-zinc-100 transition-colors focus-visible:outline-none focus-visible:text-blue-400"
+            >
+              Upload
             </a>
-            <a href="#demo" className="hover:text-white transition-colors">
+            <a
+              href="#demo"
+              className="hover:text-zinc-100 transition-colors focus-visible:outline-none focus-visible:text-blue-400"
+            >
               Interactive Demo
             </a>
-            <a href="#features" className="hover:text-white transition-colors">
-              Features
+            <a
+              href="#how-it-works"
+              className="hover:text-zinc-100 transition-colors focus-visible:outline-none focus-visible:text-blue-400"
+            >
+              How It Works
             </a>
-            <a href="#formats" className="hover:text-white transition-colors">
-              Supported Formats
+            <a
+              href="#formats"
+              className="hover:text-zinc-100 transition-colors focus-visible:outline-none focus-visible:text-blue-400"
+            >
+              Formats
             </a>
-            <a href="#faq" className="hover:text-white transition-colors">
+            <a
+              href="#faq"
+              className="hover:text-zinc-100 transition-colors focus-visible:outline-none focus-visible:text-blue-400"
+            >
               FAQ
             </a>
           </nav>
@@ -58,26 +80,20 @@ export function Navbar({ onReset, showReset }: NavbarProps) {
           {showReset ? (
             <button
               onClick={onReset}
-              className="flex items-center gap-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 hover:text-white px-3.5 py-2 text-xs sm:text-sm font-medium transition-all duration-200 border border-slate-700/60 shadow-sm"
-              id="nav-new-image-btn"
+              className="flex items-center gap-1.5 rounded-lg bg-zinc-800 hover:bg-zinc-700 text-zinc-200 hover:text-white px-3 py-1.5 text-xs font-medium border border-zinc-700 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500"
+              id="btn-nav-upload-another"
             >
-              <RotateCcw className="h-4 w-4 text-indigo-400" />
-              <span>New Image</span>
+              <ArrowLeft className="h-3.5 w-3.5" />
+              <span>Upload Another Photo</span>
             </button>
           ) : (
-            <div className="flex items-center gap-2">
-              <div className="hidden sm:flex items-center gap-1.5 rounded-full bg-emerald-500/10 border border-emerald-500/20 px-3 py-1 text-xs font-medium text-emerald-400">
-                <ShieldCheck className="h-3.5 w-3.5" />
-                <span>100% In-Browser Privacy</span>
-              </div>
-              <a
-                href="#upload"
-                className="flex items-center gap-1.5 rounded-xl bg-gradient-to-r from-indigo-500 to-violet-600 hover:from-indigo-600 hover:to-violet-700 px-4 py-2 text-xs sm:text-sm font-semibold text-white shadow-md shadow-indigo-500/20 transition-all active:scale-95"
-              >
-                <Zap className="h-3.5 w-3.5 fill-current" />
-                <span>Try Free</span>
-              </a>
-            </div>
+            <a
+              href="#upload"
+              className="flex items-center gap-1.5 rounded-lg bg-blue-600 hover:bg-blue-500 text-white px-3.5 py-1.5 text-xs font-medium transition-colors shadow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500"
+            >
+              <Plus className="h-3.5 w-3.5" />
+              <span>Remove Background</span>
+            </a>
           )}
         </div>
       </div>

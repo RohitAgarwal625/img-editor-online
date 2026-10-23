@@ -1,7 +1,7 @@
 "use client";
 
-import React, { useState } from "react";
-import { ArrowLeft, Sliders, Columns, Eye, Grid, Sparkles } from "lucide-react";
+import React, { useState, useEffect } from "react";
+import { ArrowLeft, Sliders, Columns, Eye, Grid, Image as ImageIcon } from "lucide-react";
 import { BeforeAfterSlider } from "./BeforeAfterSlider";
 import { BackgroundColorPicker } from "./BackgroundColorPicker";
 import { DownloadPanel } from "./DownloadPanel";
@@ -15,7 +15,7 @@ interface ResultsWorkspaceProps {
   onReset: () => void;
 }
 
-type ViewMode = "slider" | "result-only" | "side-by-side";
+type ViewMode = "slider" | "result-only" | "side-by-side" | "original";
 
 export function ResultsWorkspace({
   originalFile,
@@ -29,95 +29,131 @@ export function ResultsWorkspace({
   const [backgroundColor, setBackgroundColor] = useState<string>("transparent");
   const [isLightChecker, setIsLightChecker] = useState<boolean>(false);
 
-  const checkerClass = isLightChecker ? "checkerboard-light" : "checkerboard-pattern";
+  const checkerClass = isLightChecker ? "checkerboard-light" : "checkerboard-dark";
+
+  // Escape key resets to upload
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape") {
+        onReset();
+      }
+    };
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [onReset]);
 
   return (
-    <div className="min-h-[calc(100vh-4rem)] flex flex-col bg-slate-950 text-slate-100">
-      {/* Top Action Bar */}
-      <div className="border-b border-slate-800/80 bg-slate-900/60 backdrop-blur-md px-4 sm:px-6 py-3">
-        <div className="mx-auto max-w-7xl flex flex-wrap items-center justify-between gap-4">
+    <div className="min-h-[calc(100vh-3.5rem)] flex flex-col bg-zinc-950 text-zinc-100">
+      {/* Studio Top Control Strip */}
+      <div className="border-b border-zinc-800 bg-zinc-900/80 px-4 py-2.5">
+        <div className="mx-auto max-w-7xl flex flex-wrap items-center justify-between gap-3">
+          {/* Left: Back & File info */}
           <div className="flex items-center gap-3">
             <button
               onClick={onReset}
-              className="flex items-center gap-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 px-3 py-1.5 text-xs sm:text-sm font-medium transition-colors border border-slate-700/60"
+              className="flex items-center gap-1.5 rounded-md border border-zinc-700 bg-zinc-800 px-2.5 py-1 text-xs text-zinc-300 hover:text-white hover:bg-zinc-700 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500"
+              title="Upload new image (Esc)"
             >
-              <ArrowLeft className="h-4 w-4" />
-              <span>Upload Another</span>
+              <ArrowLeft className="h-3.5 w-3.5" />
+              <span>Back</span>
             </button>
-            <div className="hidden sm:block h-4 w-px bg-slate-800" />
+            <div className="h-4 w-px bg-zinc-800 hidden sm:block" />
             <div className="hidden sm:flex items-center gap-2">
-              <span className="text-sm font-semibold text-slate-200 truncate max-w-[200px]">
+              <span className="text-xs font-semibold text-zinc-200 truncate max-w-[200px]">
                 {originalFile.name}
               </span>
-              <span className="rounded-md bg-slate-800 px-2 py-0.5 text-xs font-mono text-indigo-300 border border-slate-700/50">
+              <span className="rounded bg-zinc-800/80 px-1.5 py-0.5 text-[10px] font-mono text-zinc-400 border border-zinc-700/60">
                 {dimensions.width}×{dimensions.height}
               </span>
             </div>
           </div>
 
-          {/* View mode toggle controls */}
-          <div className="flex items-center gap-2">
-            <div className="flex items-center rounded-xl bg-slate-950 p-1 border border-slate-800">
-              <button
-                type="button"
-                onClick={() => setViewMode("slider")}
-                className={`flex items-center gap-1.5 rounded-lg px-2.5 py-1 text-xs font-medium transition-all ${
-                  viewMode === "slider"
-                    ? "bg-indigo-600 text-white shadow-sm"
-                    : "text-slate-400 hover:text-slate-200"
-                }`}
-                title="Before & After Slider"
-              >
-                <Sliders className="h-3.5 w-3.5" />
-                <span className="hidden md:inline">Slider</span>
-              </button>
-              <button
-                type="button"
-                onClick={() => setViewMode("side-by-side")}
-                className={`flex items-center gap-1.5 rounded-lg px-2.5 py-1 text-xs font-medium transition-all ${
-                  viewMode === "side-by-side"
-                    ? "bg-indigo-600 text-white shadow-sm"
-                    : "text-slate-400 hover:text-slate-200"
-                }`}
-                title="Side by Side"
-              >
-                <Columns className="h-3.5 w-3.5" />
-                <span className="hidden md:inline">Side by Side</span>
-              </button>
-              <button
-                type="button"
-                onClick={() => setViewMode("result-only")}
-                className={`flex items-center gap-1.5 rounded-lg px-2.5 py-1 text-xs font-medium transition-all ${
-                  viewMode === "result-only"
-                    ? "bg-indigo-600 text-white shadow-sm"
-                    : "text-slate-400 hover:text-slate-200"
-                }`}
-                title="Isolated Cutout"
-              >
-                <Eye className="h-3.5 w-3.5" />
-                <span className="hidden md:inline">Result</span>
-              </button>
-            </div>
+          {/* Center: View Modes Segmented Control */}
+          <div
+            role="tablist"
+            aria-label="Viewport display mode"
+            className="flex items-center rounded-lg bg-zinc-950 p-1 border border-zinc-800"
+          >
+            <button
+              type="button"
+              role="tab"
+              aria-selected={viewMode === "slider"}
+              onClick={() => setViewMode("slider")}
+              className={`flex items-center gap-1.5 rounded-md px-2.5 py-1 text-xs font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 ${
+                viewMode === "slider"
+                  ? "bg-zinc-800 text-white shadow-sm"
+                  : "text-zinc-400 hover:text-zinc-200"
+              }`}
+            >
+              <Sliders className="h-3.5 w-3.5" />
+              <span>Split Slider</span>
+            </button>
+            <button
+              type="button"
+              role="tab"
+              aria-selected={viewMode === "side-by-side"}
+              onClick={() => setViewMode("side-by-side")}
+              className={`flex items-center gap-1.5 rounded-md px-2.5 py-1 text-xs font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 ${
+                viewMode === "side-by-side"
+                  ? "bg-zinc-800 text-white shadow-sm"
+                  : "text-zinc-400 hover:text-zinc-200"
+              }`}
+            >
+              <Columns className="h-3.5 w-3.5" />
+              <span>Side-by-Side</span>
+            </button>
+            <button
+              type="button"
+              role="tab"
+              aria-selected={viewMode === "result-only"}
+              onClick={() => setViewMode("result-only")}
+              className={`flex items-center gap-1.5 rounded-md px-2.5 py-1 text-xs font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 ${
+                viewMode === "result-only"
+                  ? "bg-zinc-800 text-white shadow-sm"
+                  : "text-zinc-400 hover:text-zinc-200"
+              }`}
+            >
+              <Eye className="h-3.5 w-3.5" />
+              <span>Cutout</span>
+            </button>
+            <button
+              type="button"
+              role="tab"
+              aria-selected={viewMode === "original"}
+              onClick={() => setViewMode("original")}
+              className={`flex items-center gap-1.5 rounded-md px-2.5 py-1 text-xs font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 ${
+                viewMode === "original"
+                  ? "bg-zinc-800 text-white shadow-sm"
+                  : "text-zinc-400 hover:text-zinc-200"
+              }`}
+            >
+              <ImageIcon className="h-3.5 w-3.5" />
+              <span>Original</span>
+            </button>
+          </div>
 
-            {/* Checkerboard style toggle */}
+          {/* Right: Grid Theme Toggle */}
+          <div className="flex items-center gap-2">
             {backgroundColor === "transparent" && (
               <button
                 type="button"
                 onClick={() => setIsLightChecker(!isLightChecker)}
-                className="flex items-center gap-1.5 rounded-xl bg-slate-800 hover:bg-slate-700 px-2.5 py-1.5 text-xs text-slate-300 border border-slate-700/60"
-                title="Toggle checkerboard theme"
+                className="flex items-center gap-1.5 rounded-md border border-zinc-700 bg-zinc-800 px-2 py-1 text-xs text-zinc-300 hover:text-white transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500"
+                title="Toggle grid contrast"
               >
-                <Grid className="h-3.5 w-3.5 text-indigo-400" />
-                <span className="hidden sm:inline">{isLightChecker ? "Dark Grid" : "Light Grid"}</span>
+                <Grid className="h-3.5 w-3.5 text-zinc-400" />
+                <span className="hidden sm:inline">
+                  {isLightChecker ? "Dark Grid" : "Light Grid"}
+                </span>
               </button>
             )}
           </div>
         </div>
       </div>
 
-      {/* Main Workspace Body */}
-      <div className="flex-1 mx-auto max-w-7xl w-full p-4 sm:p-6 lg:p-8">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+      {/* Main Studio Area */}
+      <div className="flex-1 mx-auto max-w-7xl w-full p-4 sm:p-6">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
           {/* Main Visual Display (8 Cols on Desktop) */}
           <div className="lg:col-span-8 flex flex-col items-center justify-center">
             {viewMode === "slider" && (
@@ -128,20 +164,22 @@ export function ResultsWorkspace({
                   backgroundColor={backgroundColor}
                   checkerboardClass={checkerClass}
                 />
-                <p className="mt-3 text-center text-xs text-slate-400">
-                  Drag the center divider left or right to compare original vs AI cutout
-                </p>
+                <div className="mt-2.5 flex items-center justify-between text-[11px] text-zinc-500 px-1">
+                  <span>Drag split divider or use <kbd className="px-1 py-0.5 rounded bg-zinc-800 border border-zinc-700 text-zinc-300 font-mono">←</kbd> <kbd className="px-1 py-0.5 rounded bg-zinc-800 border border-zinc-700 text-zinc-300 font-mono">→</kbd> keys</span>
+                  <span>100% Native Resolution</span>
+                </div>
               </div>
             )}
 
             {viewMode === "result-only" && (
-              <div className="w-full max-w-4xl h-[420px] sm:h-[520px] rounded-2xl overflow-hidden border border-slate-800 shadow-2xl relative flex items-center justify-center">
+              <div className="w-full max-w-4xl h-[380px] sm:h-[480px] md:h-[520px] rounded-xl overflow-hidden border border-zinc-800 relative flex items-center justify-center">
                 <div
                   className={`absolute inset-0 w-full h-full ${
                     backgroundColor === "transparent" ? checkerClass : ""
                   }`}
                   style={{
-                    backgroundColor: backgroundColor !== "transparent" ? backgroundColor : undefined,
+                    backgroundColor:
+                      backgroundColor !== "transparent" ? backgroundColor : undefined,
                   }}
                 />
                 <img
@@ -149,17 +187,33 @@ export function ResultsWorkspace({
                   alt="Background removed result"
                   className="relative z-10 w-full h-full object-contain pointer-events-none p-4"
                 />
+                <div className="absolute top-3 right-3 z-20 rounded bg-zinc-950/80 px-2 py-0.5 text-[11px] font-medium text-emerald-400 border border-zinc-800">
+                  Cutout Only
+                </div>
+              </div>
+            )}
+
+            {viewMode === "original" && (
+              <div className="w-full max-w-4xl h-[380px] sm:h-[480px] md:h-[520px] rounded-xl overflow-hidden border border-zinc-800 bg-zinc-950 relative flex items-center justify-center">
+                <img
+                  src={originalUrl}
+                  alt="Original input"
+                  className="w-full h-full object-contain pointer-events-none p-4"
+                />
+                <div className="absolute top-3 left-3 z-20 rounded bg-zinc-950/80 px-2 py-0.5 text-[11px] font-medium text-zinc-300 border border-zinc-800">
+                  Original Photo
+                </div>
               </div>
             )}
 
             {viewMode === "side-by-side" && (
               <div className="w-full grid grid-cols-1 sm:grid-cols-2 gap-4">
                 {/* Original */}
-                <div className="rounded-2xl border border-slate-800 bg-slate-900 overflow-hidden shadow-xl">
-                  <div className="p-2.5 bg-slate-950/80 border-b border-slate-800/80 flex items-center justify-between text-xs font-semibold text-slate-400">
+                <div className="rounded-xl border border-zinc-800 bg-zinc-900 overflow-hidden shadow-sm">
+                  <div className="px-3 py-2 bg-zinc-950 border-b border-zinc-800 flex items-center justify-between text-xs font-medium text-zinc-400">
                     <span>Original</span>
                   </div>
-                  <div className="h-[280px] sm:h-[380px] flex items-center justify-center p-2">
+                  <div className="h-[280px] sm:h-[360px] flex items-center justify-center p-2 bg-zinc-950">
                     <img
                       src={originalUrl}
                       alt="Original image"
@@ -169,19 +223,17 @@ export function ResultsWorkspace({
                 </div>
 
                 {/* Result */}
-                <div className="rounded-2xl border border-slate-800 bg-slate-900 overflow-hidden shadow-xl">
-                  <div className="p-2.5 bg-slate-950/80 border-b border-slate-800/80 flex items-center justify-between text-xs font-semibold text-emerald-400">
-                    <div className="flex items-center gap-1.5">
-                      <Sparkles className="h-3.5 w-3.5" />
-                      <span>AI Background Removed</span>
-                    </div>
+                <div className="rounded-xl border border-zinc-800 bg-zinc-900 overflow-hidden shadow-sm">
+                  <div className="px-3 py-2 bg-zinc-950 border-b border-zinc-800 flex items-center justify-between text-xs font-medium text-emerald-400">
+                    <span>AI Background Removed</span>
                   </div>
                   <div
-                    className={`h-[280px] sm:h-[380px] flex items-center justify-center p-2 ${
+                    className={`h-[280px] sm:h-[360px] flex items-center justify-center p-2 ${
                       backgroundColor === "transparent" ? checkerClass : ""
                     }`}
                     style={{
-                      backgroundColor: backgroundColor !== "transparent" ? backgroundColor : undefined,
+                      backgroundColor:
+                        backgroundColor !== "transparent" ? backgroundColor : undefined,
                     }}
                   >
                     <img
@@ -195,10 +247,10 @@ export function ResultsWorkspace({
             )}
           </div>
 
-          {/* Right Controls Panel (4 Cols on Desktop) */}
-          <div className="lg:col-span-4 space-y-6 w-full">
-            {/* Background Color Picker Card */}
-            <div className="rounded-2xl bg-slate-900/90 border border-slate-800 p-5 backdrop-blur-md shadow-xl">
+          {/* Right Inspector Panel (4 Cols on Desktop) */}
+          <div className="lg:col-span-4 space-y-4 w-full">
+            {/* Background Color Card */}
+            <div className="rounded-xl border border-zinc-800 bg-zinc-900/90 p-4 shadow-sm">
               <BackgroundColorPicker
                 currentColor={backgroundColor}
                 onChangeColor={setBackgroundColor}

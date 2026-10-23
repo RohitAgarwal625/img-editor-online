@@ -7,66 +7,58 @@ export function HowItWorksSection() {
       number: "01",
       title: "Upload or Paste",
       description:
-        "Drag and drop any photo, browse files, or press Cmd+V to paste from your clipboard. Supports JPEG, PNG, WebP, and BMP up to 25MB.",
+        "Drop any image, browse local files, or press Cmd+V to paste a screenshot directly from your clipboard. Supports JPEG, PNG, WebP, BMP up to 25MB.",
       icon: UploadCloud,
-      color: "from-blue-500 to-indigo-500",
     },
     {
       number: "02",
-      title: "Neural AI Removes Background",
+      title: "Local Neural Segmentation",
       description:
-        "The ISNet neural network runs locally in your browser via WebAssembly, detecting people, products, or pets with pixel-level precision.",
+        "The ISNet ONNX model runs locally in your browser via multi-threaded WebAssembly. No files are uploaded to any external server.",
       icon: Cpu,
-      color: "from-indigo-500 to-violet-500",
     },
     {
       number: "03",
-      title: "Recolor & Download",
+      title: "Recolor & Export",
       description:
-        "Preview transparent cutout, composite onto e-commerce pure white or custom colors, and export high-res PNG or WebP with zero watermarks.",
+        "Keep the transparent alpha channel, composite onto pure white for e-commerce listings, or apply custom colors. Download in full HD resolution.",
       icon: Palette,
-      color: "from-violet-500 to-pink-500",
     },
   ];
 
   return (
-    <section id="how-it-works" className="py-20 bg-slate-950 relative">
-      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        <div className="text-center max-w-3xl mx-auto mb-16 space-y-4">
-          <h2 className="text-3xl sm:text-4xl font-extrabold tracking-tight text-white">
-            How It Works in 3 Simple Steps
+    <section id="how-it-works" className="py-14 border-b border-zinc-800/60 bg-zinc-950">
+      <div className="mx-auto max-w-5xl px-4 sm:px-6">
+        <div className="text-center max-w-2xl mx-auto mb-10 space-y-2">
+          <h2 className="text-2xl sm:text-3xl font-bold tracking-tight text-zinc-100">
+            How It Works
           </h2>
-          <p className="text-sm sm:text-base text-slate-400">
-            Zero complex software, zero tedious magnetic lasso selections. Simple, fast, and completely free.
+          <p className="text-sm text-zinc-400">
+            Three simple steps to studio-grade cutouts right in your browser.
           </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 relative">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           {steps.map((step) => {
             const Icon = step.icon;
             return (
               <div
                 key={step.number}
-                className="relative rounded-3xl bg-slate-900/60 border border-slate-800/80 p-8 backdrop-blur-md shadow-xl hover:border-indigo-500/40 transition-all duration-300 hover:-translate-y-1 group"
+                className="rounded-xl border border-zinc-800 bg-zinc-900/40 p-5 space-y-3"
               >
-                {/* Step Number Watermark */}
-                <span className="absolute top-6 right-6 text-4xl font-black text-slate-800/80 font-mono select-none group-hover:text-indigo-900/40 transition-colors">
-                  {step.number}
-                </span>
-
-                {/* Icon */}
-                <div
-                  className={`flex h-14 w-14 items-center justify-center rounded-2xl bg-gradient-to-tr ${step.color} p-0.5 shadow-lg mb-6 group-hover:scale-105 transition-transform`}
-                >
-                  <div className="flex h-full w-full items-center justify-center rounded-[14px] bg-slate-950/70">
-                    <Icon className="h-7 w-7 text-white" />
+                <div className="flex items-center justify-between">
+                  <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-zinc-800 border border-zinc-700 text-blue-400">
+                    <Icon className="h-4 w-4" />
                   </div>
+                  <span className="font-mono text-xs font-semibold text-zinc-500">
+                    STEP {step.number}
+                  </span>
                 </div>
 
-                <h3 className="text-xl font-bold text-white mb-3 group-hover:text-indigo-200 transition-colors">
+                <h3 className="text-sm font-semibold text-zinc-200">
                   {step.title}
                 </h3>
-                <p className="text-sm text-slate-400 leading-relaxed">
+                <p className="text-xs text-zinc-400 leading-relaxed">
                   {step.description}
                 </p>
               </div>

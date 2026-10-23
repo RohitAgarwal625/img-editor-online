@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useRef, useEffect, useCallback } from "react";
-import { UploadCloud, Image as ImageIcon, AlertCircle, Sparkles, ArrowRight } from "lucide-react";
+import { UploadCloud, Image as ImageIcon, AlertCircle, ArrowRight, Clipboard } from "lucide-react";
 import { validateImageFile } from "@/lib/image-validation";
 
 interface UploadZoneProps {
@@ -13,19 +13,19 @@ const SAMPLE_IMAGES = [
   {
     id: "person",
     name: "Portrait",
-    description: "Hair & edge details",
+    description: "Fine hair & shoulder silhouette",
     url: "/samples/sample-person.jpg",
   },
   {
     id: "product",
-    name: "E-Commerce Product",
-    description: "Clean product cutout",
+    name: "E-Commerce",
+    description: "Crisp studio product cutout",
     url: "/samples/sample-product.jpg",
   },
   {
     id: "animal",
-    name: "Pet / Fur",
-    description: "Complex fine fur matting",
+    name: "Pet Fur",
+    description: "Soft fur & whisker matting",
     url: "/samples/sample-animal.jpg",
   },
 ];
@@ -49,7 +49,6 @@ export function UploadZone({ onFileSelected, disabled = false }: UploadZoneProps
     [onFileSelected]
   );
 
-  // Handle Drag events
   const handleDragOver = (e: React.DragEvent) => {
     e.preventDefault();
     e.stopPropagation();
@@ -79,7 +78,7 @@ export function UploadZone({ onFileSelected, disabled = false }: UploadZoneProps
     }
   };
 
-  // Clipboard paste listener (Cmd+V / Ctrl+V support)
+  // Clipboard paste listener
   useEffect(() => {
     const handlePaste = (e: ClipboardEvent) => {
       if (disabled) return;
@@ -101,7 +100,6 @@ export function UploadZone({ onFileSelected, disabled = false }: UploadZoneProps
     return () => window.removeEventListener("paste", handlePaste);
   }, [disabled, processFile]);
 
-  // Load sample image
   const handleSelectSample = async (sample: typeof SAMPLE_IMAGES[0]) => {
     try {
       setIsLoadingSample(sample.id);
@@ -119,17 +117,31 @@ export function UploadZone({ onFileSelected, disabled = false }: UploadZoneProps
   };
 
   return (
-    <div id="upload" className="w-full max-w-3xl mx-auto space-y-6">
-      {/* Drop Zone Box */}
+    <div
+      id="upload"
+      className="w-full max-w-2xl mx-auto space-y-4"
+      role="region"
+      aria-label="Image upload and sample selector"
+    >
+      {/* Primary Drop Box */}
       <div
         onDragOver={handleDragOver}
         onDragLeave={handleDragLeave}
         onDrop={handleDrop}
         onClick={() => !disabled && fileInputRef.current?.click()}
-        className={`relative group rounded-3xl p-8 sm:p-12 transition-all duration-300 cursor-pointer text-center border-2 border-dashed ${
+        onKeyDown={(e) => {
+          if (e.key === "Enter" || e.key === " ") {
+            e.preventDefault();
+            fileInputRef.current?.click();
+          }
+        }}
+        tabIndex={disabled ? -1 : 0}
+        role="button"
+        aria-label="Drag and drop image or press to browse files"
+        className={`relative rounded-xl border-2 border-dashed p-8 sm:p-10 text-center transition-all cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 ${
           isDragging
-            ? "border-indigo-400 bg-indigo-950/40 shadow-2xl shadow-indigo-500/20 scale-[1.01]"
-            : "border-slate-700/80 bg-slate-900/60 hover:border-indigo-500/60 hover:bg-slate-900/90 shadow-xl backdrop-blur-md"
+            ? "border-blue-500 bg-blue-950/20"
+            : "border-zinc-800 bg-zinc-900/60 hover:border-zinc-700 hover:bg-zinc-900/80"
         }`}
       >
         <input
@@ -139,93 +151,92 @@ export function UploadZone({ onFileSelected, disabled = false }: UploadZoneProps
           onChange={handleFileChange}
           className="hidden"
           id="file-upload-input"
+          tabIndex={-1}
         />
 
-        {/* Center Glow */}
-        <div className="absolute inset-0 rounded-3xl glow-gradient opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
-
-        <div className="relative z-10 flex flex-col items-center justify-center space-y-5">
-          {/* Upload Icon */}
-          <div className="flex h-20 w-20 items-center justify-center rounded-2xl bg-gradient-to-tr from-indigo-600 via-indigo-500 to-violet-600 p-0.5 shadow-xl shadow-indigo-500/30 group-hover:scale-105 transition-transform duration-300">
-            <div className="flex h-full w-full items-center justify-center rounded-[14px] bg-slate-950/80">
-              <UploadCloud className="h-10 w-10 text-indigo-300 transition-transform group-hover:-translate-y-1" />
-            </div>
+        <div className="flex flex-col items-center justify-center space-y-4">
+          <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-zinc-800 border border-zinc-700 text-zinc-300">
+            <UploadCloud className="h-6 w-6 text-blue-400" />
           </div>
 
-          {/* Heading and Action */}
-          <div className="space-y-2">
-            <h3 className="text-xl sm:text-2xl font-bold tracking-tight text-white group-hover:text-indigo-200 transition-colors">
-              Drag & Drop your image here
-            </h3>
-            <p className="text-sm text-slate-400 max-w-sm mx-auto">
-              or browse from your device, or simply press <kbd className="rounded bg-slate-800 px-1.5 py-0.5 font-mono text-xs text-slate-300 border border-slate-700">Cmd+V</kbd> to paste
+          <div className="space-y-1">
+            <p className="text-base font-semibold text-zinc-100">
+              Drag and drop your photo here
+            </p>
+            <p className="text-xs text-zinc-400">
+              or browse from your computer
             </p>
           </div>
 
-          {/* Button CTA */}
-          <button
-            type="button"
-            className="flex items-center gap-2 rounded-2xl bg-gradient-to-r from-indigo-500 via-indigo-600 to-violet-600 hover:from-indigo-600 hover:to-violet-700 text-white font-semibold px-8 py-3.5 shadow-lg shadow-indigo-500/25 group-hover:shadow-indigo-500/40 transition-all duration-200 active:scale-95 text-sm sm:text-base"
-          >
-            <ImageIcon className="h-4 w-4" />
-            <span>Upload Image</span>
-          </button>
+          <div className="pt-1">
+            <span className="inline-flex items-center gap-2 rounded-lg bg-blue-600 hover:bg-blue-500 text-white font-medium px-5 py-2.5 text-xs sm:text-sm transition-colors shadow-sm">
+              <ImageIcon className="h-4 w-4" />
+              <span>Choose Image</span>
+            </span>
+          </div>
 
-          {/* Formats and Size badge */}
-          <div className="flex flex-wrap items-center justify-center gap-2 text-xs text-slate-400 pt-2">
-            <span className="rounded-md bg-slate-800/80 px-2 py-0.5 border border-slate-700/60 font-medium text-slate-300">JPEG</span>
-            <span className="rounded-md bg-slate-800/80 px-2 py-0.5 border border-slate-700/60 font-medium text-slate-300">PNG</span>
-            <span className="rounded-md bg-slate-800/80 px-2 py-0.5 border border-slate-700/60 font-medium text-slate-300">WebP</span>
-            <span className="rounded-md bg-slate-800/80 px-2 py-0.5 border border-slate-700/60 font-medium text-slate-300">BMP</span>
-            <span className="text-slate-500">•</span>
-            <span className="text-slate-400">Up to 25MB</span>
+          {/* Quick clipboard paste helper */}
+          <div className="flex items-center gap-2 pt-2 text-[11px] text-zinc-500">
+            <Clipboard className="h-3.5 w-3.5" />
+            <span>
+              Tip: Press <kbd className="rounded bg-zinc-800 px-1.5 py-0.5 font-mono text-[10px] text-zinc-300 border border-zinc-700">⌘V</kbd> or <kbd className="rounded bg-zinc-800 px-1.5 py-0.5 font-mono text-[10px] text-zinc-300 border border-zinc-700">Ctrl+V</kbd> anywhere to paste a screenshot
+            </span>
+          </div>
+
+          {/* Format specifications */}
+          <div className="flex flex-wrap items-center justify-center gap-1.5 pt-1 text-[11px] text-zinc-500">
+            <span>Supports JPEG, PNG, WebP, BMP, GIF</span>
+            <span>•</span>
+            <span>Max 25MB</span>
           </div>
         </div>
       </div>
 
-      {/* Error alert if any */}
+      {/* Error Banner */}
       {errorMessage && (
-        <div className="flex items-center gap-3 rounded-2xl bg-red-500/10 border border-red-500/30 p-4 text-sm text-red-200">
-          <AlertCircle className="h-5 w-5 text-red-400 shrink-0" />
+        <div
+          role="alert"
+          className="flex items-center gap-3 rounded-lg bg-red-950/40 border border-red-800/80 p-3.5 text-xs text-red-200"
+        >
+          <AlertCircle className="h-4 w-4 text-red-400 shrink-0" />
           <p className="flex-1">{errorMessage}</p>
         </div>
       )}
 
-      {/* Sample Images Row */}
-      <div className="rounded-2xl bg-slate-900/40 border border-slate-800/80 p-5 backdrop-blur-sm">
-        <div className="flex items-center justify-between mb-3">
-          <div className="flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-slate-400">
-            <Sparkles className="h-3.5 w-3.5 text-indigo-400" />
-            <span>No image on hand? Try a sample</span>
-          </div>
-          <span className="text-[11px] text-slate-500">Instant one-click demo</span>
+      {/* Real Sample Images Row */}
+      <div className="rounded-xl border border-zinc-800 bg-zinc-900/40 p-3.5">
+        <div className="flex items-center justify-between pb-2.5 mb-2 border-b border-zinc-800/60">
+          <span className="text-xs font-medium text-zinc-400">
+            Try with an example image:
+          </span>
+          <span className="text-[11px] text-zinc-500">Instant test</span>
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5">
           {SAMPLE_IMAGES.map((sample) => (
             <button
               key={sample.id}
               type="button"
               disabled={disabled || isLoadingSample !== null}
               onClick={() => handleSelectSample(sample)}
-              className="group/sample flex items-center gap-3 rounded-xl bg-slate-950/60 hover:bg-slate-800/80 border border-slate-800 hover:border-indigo-500/40 p-2 text-left transition-all duration-200 hover:scale-[1.02]"
+              className="flex items-center gap-2.5 rounded-lg border border-zinc-800 bg-zinc-900 hover:border-zinc-700 hover:bg-zinc-800/70 p-2 text-left transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 disabled:opacity-50"
             >
-              <div className="h-12 w-12 rounded-lg overflow-hidden bg-slate-800 shrink-0 border border-slate-700/50">
+              <div className="h-10 w-10 rounded-md overflow-hidden bg-zinc-800 shrink-0 border border-zinc-700/60">
                 <img
                   src={sample.url}
                   alt={sample.name}
-                  className="h-full w-full object-cover group-hover/sample:scale-110 transition-transform duration-300"
+                  className="h-full w-full object-cover"
                 />
               </div>
               <div className="flex-1 min-w-0">
-                <p className="text-xs font-semibold text-slate-200 truncate group-hover/sample:text-indigo-300">
+                <p className="text-xs font-semibold text-zinc-200 truncate">
                   {sample.name}
                 </p>
-                <p className="text-[11px] text-slate-400 truncate">
+                <p className="text-[10px] text-zinc-400 truncate">
                   {isLoadingSample === sample.id ? "Loading..." : sample.description}
                 </p>
               </div>
-              <ArrowRight className="h-3.5 w-3.5 text-slate-600 group-hover/sample:text-indigo-400 group-hover/sample:translate-x-0.5 transition-all shrink-0 mr-1" />
+              <ArrowRight className="h-3 w-3 text-zinc-600 shrink-0" />
             </button>
           ))}
         </div>

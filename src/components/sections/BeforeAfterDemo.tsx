@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
-import { Sparkles, ArrowRight, User, ShoppingBag, Dog } from "lucide-react";
+import { User, ShoppingBag, Dog, ArrowRight } from "lucide-react";
 
 interface BeforeAfterDemoProps {
   onSelectSample: (sampleUrl: string, sampleName: string) => void;
@@ -10,25 +10,25 @@ interface BeforeAfterDemoProps {
 const DEMO_CASES = [
   {
     id: "person",
-    title: "Portraits & People",
-    category: "Hair & Edge Precision",
-    description: "Preserves natural stray hairs, intricate shoulder lines, and subtle facial silhouettes without harsh halos.",
+    title: "Portrait Headshot",
+    category: "Hair & Silhouette",
+    description: "Preserves natural flyaway hairs, shoulder lines, and subtle facial silhouettes without harsh white halos.",
     url: "/samples/sample-person.jpg",
     icon: User,
   },
   {
     id: "product",
-    title: "E-Commerce Products",
-    category: "Amazon & Shopify Ready",
-    description: "Get crisp, studio-ready product isolation for catalog listings, marketplaces, and advertising campaigns.",
+    title: "E-Commerce Product",
+    category: "Amazon & Shopify",
+    description: "Studio-grade product isolation for Amazon listings, Shopify stores, catalogs, and marketplace ads.",
     url: "/samples/sample-product.jpg",
     icon: ShoppingBag,
   },
   {
     id: "animal",
-    title: "Pets & Fine Fur",
-    category: "Complex Texture Matting",
-    description: "Handles tricky soft edges, whiskers, and fluffy fur that traditional magnetic lasso tools struggle with.",
+    title: "Pet & Fine Fur",
+    category: "Texture Matting",
+    description: "Seamlessly separates soft fur, whiskers, and organic edges that traditional lasso tools fail on.",
     url: "/samples/sample-animal.jpg",
     icon: Dog,
   },
@@ -41,22 +41,18 @@ export function BeforeAfterDemo({ onSelectSample }: BeforeAfterDemoProps) {
   const activeDemo = DEMO_CASES.find((d) => d.id === activeTab) || DEMO_CASES[0];
 
   return (
-    <section id="demo" className="py-20 bg-slate-900/50 border-y border-slate-800/80 relative">
-      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        <div className="text-center max-w-3xl mx-auto mb-12 space-y-4">
-          <div className="inline-flex items-center gap-1.5 rounded-full bg-indigo-500/10 border border-indigo-500/20 px-3.5 py-1 text-xs font-semibold text-indigo-300">
-            <Sparkles className="h-3.5 w-3.5 text-indigo-400" />
-            <span>Interactive Showcase</span>
-          </div>
-          <h2 className="text-3xl sm:text-4xl font-extrabold tracking-tight text-white">
-            Exceptional Quality Across Every Subject
+    <section id="demo" className="py-14 border-b border-zinc-800/60 bg-zinc-950">
+      <div className="mx-auto max-w-5xl px-4 sm:px-6">
+        <div className="text-center max-w-2xl mx-auto mb-8 space-y-2">
+          <h2 className="text-2xl sm:text-3xl font-bold tracking-tight text-zinc-100">
+            Precision Edge Matting
           </h2>
-          <p className="text-sm sm:text-base text-slate-400 max-w-2xl mx-auto">
-            From fine flyaway hair and pet fur to clean e-commerce product edges. See how our AI isolates details effortlessly.
+          <p className="text-sm text-zinc-400">
+            Inspect the sub-pixel boundary accuracy on complex subjects before uploading.
           </p>
 
           {/* Subject Tab Selector */}
-          <div className="flex flex-wrap items-center justify-center gap-2 pt-4">
+          <div className="flex flex-wrap items-center justify-center gap-1.5 pt-3">
             {DEMO_CASES.map((demo) => {
               const Icon = demo.icon;
               const isActive = activeTab === demo.id;
@@ -65,13 +61,13 @@ export function BeforeAfterDemo({ onSelectSample }: BeforeAfterDemoProps) {
                   key={demo.id}
                   type="button"
                   onClick={() => setActiveTab(demo.id)}
-                  className={`flex items-center gap-2 rounded-xl px-4 py-2.5 text-xs sm:text-sm font-semibold transition-all ${
+                  className={`flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-xs font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 ${
                     isActive
-                      ? "bg-indigo-600 text-white shadow-lg shadow-indigo-500/25 scale-105"
-                      : "bg-slate-800/80 text-slate-300 hover:bg-slate-800 hover:text-white border border-slate-700/60"
+                      ? "bg-zinc-800 text-white border border-zinc-700 shadow-sm"
+                      : "text-zinc-400 hover:text-zinc-200 hover:bg-zinc-900 border border-transparent"
                   }`}
                 >
-                  <Icon className="h-4 w-4" />
+                  <Icon className="h-3.5 w-3.5" />
                   <span>{demo.title}</span>
                 </button>
               );
@@ -80,38 +76,38 @@ export function BeforeAfterDemo({ onSelectSample }: BeforeAfterDemoProps) {
         </div>
 
         {/* Demo Interactive Viewer */}
-        <div className="max-w-4xl mx-auto bg-slate-950 rounded-3xl border border-slate-800 p-4 sm:p-6 shadow-2xl">
-          <div className="relative h-[340px] sm:h-[460px] md:h-[520px] rounded-2xl overflow-hidden select-none border border-slate-800 group">
-            {/* Background Layer (Checkerboard with cut preview) */}
-            <div className="absolute inset-0 w-full h-full flex items-center justify-center checkerboard-pattern">
+        <div className="rounded-xl border border-zinc-800 bg-zinc-900/60 p-3 sm:p-4 shadow-sm">
+          <div className="relative h-[320px] sm:h-[440px] rounded-lg overflow-hidden select-none border border-zinc-800 bg-zinc-950">
+            {/* Background Layer (Checkerboard with sample image) */}
+            <div className="absolute inset-0 w-full h-full flex items-center justify-center checkerboard-dark">
               <img
                 src={activeDemo.url}
                 alt={activeDemo.title}
-                className="w-full h-full object-contain filter drop-shadow-[0_15px_25px_rgba(0,0,0,0.6)]"
+                className="w-full h-full object-contain filter drop-shadow-[0_10px_20px_rgba(0,0,0,0.5)] p-2 sm:p-4"
               />
-              <div className="absolute top-4 right-4 z-10 rounded-md bg-slate-950/80 backdrop-blur-md px-3 py-1 text-xs font-semibold text-emerald-400 border border-emerald-500/30">
-                Transparent Cutout
+              <div className="absolute top-3 right-3 z-10 rounded bg-zinc-950/80 px-2 py-0.5 text-[11px] font-medium text-emerald-400 border border-zinc-800">
+                Cutout Preview
               </div>
             </div>
 
             {/* Foreground Layer (Original) clipped by slider */}
             <div
-              className="absolute inset-0 w-full h-full overflow-hidden bg-slate-900 pointer-events-none"
+              className="absolute inset-0 w-full h-full overflow-hidden bg-zinc-950 pointer-events-none"
               style={{ width: `${sliderPos}%` }}
             >
               <div className="absolute inset-0 w-full h-full flex items-center justify-center">
                 <img
                   src={activeDemo.url}
                   alt={activeDemo.title}
-                  className="w-full h-full object-contain"
+                  className="w-full h-full object-contain p-2 sm:p-4"
                 />
               </div>
-              <div className="absolute top-4 left-4 z-10 rounded-md bg-slate-950/80 backdrop-blur-md px-3 py-1 text-xs font-semibold text-slate-300 border border-slate-700/60">
+              <div className="absolute top-3 left-3 z-10 rounded bg-zinc-950/80 px-2 py-0.5 text-[11px] font-medium text-zinc-300 border border-zinc-800">
                 Original Image
               </div>
             </div>
 
-            {/* Slider Range Input */}
+            {/* Range Input for accessibility and drag */}
             <input
               type="range"
               min="0"
@@ -119,39 +115,38 @@ export function BeforeAfterDemo({ onSelectSample }: BeforeAfterDemoProps) {
               value={sliderPos}
               onChange={(e) => setSliderPos(Number(e.target.value))}
               className="absolute inset-0 w-full h-full opacity-0 cursor-ew-resize z-30"
-              aria-label="Before and after split slider"
+              aria-label="Interactive before and after comparison slider"
             />
 
             {/* Divider visual line */}
             <div
-              className="absolute top-0 bottom-0 z-20 w-0.5 bg-white pointer-events-none"
+              className="absolute top-0 bottom-0 z-20 w-0.5 bg-white shadow-[0_0_8px_rgba(0,0,0,0.8)] pointer-events-none"
               style={{ left: `${sliderPos}%` }}
             >
-              <div className="absolute top-1/2 -translate-y-1/2 -translate-x-1/2 flex h-8 w-8 items-center justify-center rounded-full bg-white text-slate-900 shadow-xl border-2 border-indigo-600">
-                <span className="text-[10px] font-bold">◄►</span>
+              <div className="absolute top-1/2 -translate-y-1/2 -translate-x-1/2 flex h-7 w-4.5 items-center justify-center rounded-full bg-white text-zinc-900 shadow-md border border-zinc-300">
+                <div className="flex gap-0.5">
+                  <div className="h-2.5 w-0.5 bg-zinc-600 rounded-full" />
+                  <div className="h-2.5 w-0.5 bg-zinc-600 rounded-full" />
+                </div>
               </div>
             </div>
           </div>
 
-          {/* Description & Action Footer */}
-          <div className="mt-6 flex flex-col sm:flex-row items-center justify-between gap-4 pt-4 border-t border-slate-800">
+          {/* Action Footer */}
+          <div className="mt-4 flex flex-col sm:flex-row items-center justify-between gap-3 pt-3 border-t border-zinc-800/80 text-xs">
             <div>
-              <div className="flex items-center gap-2">
-                <h3 className="text-base font-bold text-white">{activeDemo.title}</h3>
-                <span className="text-xs font-semibold text-indigo-400">• {activeDemo.category}</span>
-              </div>
-              <p className="text-xs sm:text-sm text-slate-400 mt-1 max-w-xl">
-                {activeDemo.description}
-              </p>
+              <span className="font-semibold text-zinc-200">{activeDemo.title}</span>
+              <span className="text-zinc-500 mx-2">•</span>
+              <span className="text-zinc-400">{activeDemo.description}</span>
             </div>
 
             <button
               type="button"
               onClick={() => onSelectSample(activeDemo.url, `${activeDemo.id}-demo.jpg`)}
-              className="shrink-0 flex items-center gap-2 rounded-xl bg-gradient-to-r from-indigo-500 to-violet-600 hover:from-indigo-600 hover:to-violet-700 text-white font-semibold px-5 py-2.5 text-xs sm:text-sm shadow-md shadow-indigo-500/20 transition-all hover:scale-105 active:scale-95"
+              className="shrink-0 flex items-center gap-1.5 rounded-lg bg-zinc-800 hover:bg-zinc-700 text-zinc-200 hover:text-white px-3 py-1.5 font-medium border border-zinc-700 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500"
             >
-              <span>Test AI on this Image</span>
-              <ArrowRight className="h-4 w-4" />
+              <span>Test with this photo</span>
+              <ArrowRight className="h-3.5 w-3.5 text-blue-400" />
             </button>
           </div>
         </div>

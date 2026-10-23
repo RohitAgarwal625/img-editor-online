@@ -115,7 +115,7 @@ export default function Home() {
   );
 
   return (
-    <div className="min-h-screen flex flex-col bg-slate-950 text-slate-100 selection:bg-indigo-500 selection:text-white">
+    <div className="min-h-screen flex flex-col bg-zinc-950 text-zinc-100 selection:bg-blue-600 selection:text-white">
       {/* Navbar with dynamic action based on state */}
       <Navbar
         showReset={appState.phase === "result" || appState.phase === "error"}
@@ -149,24 +149,24 @@ export default function Home() {
 
         {/* Error State */}
         {appState.phase === "error" && (
-          <div className="min-h-[calc(100vh-4rem)] flex items-center justify-center p-4">
-            <div className="max-w-md w-full rounded-3xl bg-slate-900/90 border border-red-500/30 p-8 text-center space-y-5 shadow-2xl backdrop-blur-md">
-              <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-2xl bg-red-500/10 border border-red-500/20 text-red-400">
-                <AlertCircle className="h-8 w-8" />
+          <div className="min-h-[calc(100vh-3.5rem)] flex items-center justify-center p-4">
+            <div className="max-w-md w-full rounded-xl bg-zinc-900 border border-zinc-800 p-6 text-center space-y-4 shadow-xl">
+              <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-lg bg-red-950/60 border border-red-800/60 text-red-400">
+                <AlertCircle className="h-6 w-6" />
               </div>
-              <div className="space-y-2">
-                <h3 className="text-xl font-bold text-white">Removal Unsuccessful</h3>
-                <p className="text-sm text-slate-400 leading-relaxed">
+              <div className="space-y-1.5">
+                <h3 className="text-base font-bold text-zinc-100">Processing Failed</h3>
+                <p className="text-xs text-zinc-400 leading-relaxed">
                   {appState.message}
                 </p>
               </div>
               <button
                 type="button"
                 onClick={handleResetToIdle}
-                className="w-full flex items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-indigo-500 to-violet-600 hover:from-indigo-600 hover:to-violet-700 text-white font-semibold py-3 px-4 shadow-lg shadow-indigo-500/20 transition-all active:scale-95"
+                className="w-full flex items-center justify-center gap-2 rounded-lg bg-blue-600 hover:bg-blue-500 text-white font-medium py-2.5 px-4 text-xs transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500"
               >
-                <RotateCcw className="h-4 w-4" />
-                <span>Try Another Image</span>
+                <RotateCcw className="h-3.5 w-3.5" />
+                <span>Upload Another Image</span>
               </button>
             </div>
           </div>
