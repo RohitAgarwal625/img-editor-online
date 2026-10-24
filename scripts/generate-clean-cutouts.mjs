@@ -6,9 +6,8 @@ async function main() {
   const { removeBackground } = await import('@imgly/background-removal-node');
 
   const samples = [
-    { in: 'public/samples/sample-woman.jpg', out: 'public/samples/sample-woman-cutout.png', name: 'Portrait (Young Woman)' },
+    { in: 'public/samples/sample-woman.jpg', out: 'public/samples/sample-woman-cutout.png', name: 'Portrait (18yo Young Woman)' },
     { in: 'public/samples/sample-car.jpg', out: 'public/samples/sample-car-cutout.png', name: 'Automotive (Sports Car)' },
-    { in: 'public/samples/sample-skyline.jpg', out: 'public/samples/sample-skyline-cutout.png', name: 'Skyline (Mumbai Sea Link)' },
     { in: 'public/samples/sample-product.jpg', out: 'public/samples/sample-product-cutout.png', name: 'Products (Headphones)' },
     { in: 'public/samples/sample-person.jpg', out: 'public/samples/sample-person-cutout.png', name: 'People (Portrait Studio)' },
     { in: 'public/samples/sample-animal.jpg', out: 'public/samples/sample-animal-cutout.png', name: 'Animals (Golden Retriever)' },

@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
-import { User, ShoppingBag, Dog, Sparkles, CheckCircle2, SlidersHorizontal, Car, Building2, Smile } from "lucide-react";
+import { User, ShoppingBag, Dog, Sparkles, CheckCircle2, SlidersHorizontal, Car, Smile } from "lucide-react";
 import { UploadZone } from "@/components/upload/UploadZone";
 
 interface HeroSectionProps {
@@ -12,20 +12,11 @@ const HERO_DEMOS = [
   {
     id: "woman",
     name: "Portraits",
-    subtitle: "21yo Natural Sunlight Portrait",
+    subtitle: "18yo Natural Sunlight Portrait",
     url: "/samples/sample-woman.jpg",
     cutoutUrl: "/samples/sample-woman-cutout.png",
     icon: Smile,
-    desc: "Flawless portrait matting preserving fine flyaway hair strands, sweater texture, and soft natural sunlight.",
-  },
-  {
-    id: "skyline",
-    name: "Mumbai Skyline",
-    subtitle: "Sea Link & Coastal Towers",
-    url: "/samples/sample-skyline.jpg",
-    cutoutUrl: "/samples/sample-skyline-cutout.png",
-    icon: Building2,
-    desc: "Complex architectural isolation separating suspension cables, concrete piers, and skyline from the twilight sky.",
+    desc: "Flawless portrait matting preserving fine flyaway hair strands, natural skin texture, and soft daylight.",
   },
   {
     id: "car",
