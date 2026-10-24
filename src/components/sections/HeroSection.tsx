@@ -12,11 +12,11 @@ const HERO_DEMOS = [
   {
     id: "woman",
     name: "Portraits",
-    subtitle: "18yo Natural Sunlight Portrait",
+    subtitle: "High-Fashion Beauty & Hair",
     url: "/samples/sample-woman.jpg",
     cutoutUrl: "/samples/sample-woman-cutout.png",
     icon: Smile,
-    desc: "Flawless portrait matting preserving fine flyaway hair strands, natural skin texture, and soft daylight.",
+    desc: "Flawless portrait matting preserving individual silky hair strands and shoulder contours with zero color fringe.",
   },
   {
     id: "car",
