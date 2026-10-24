@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
-import { User, ShoppingBag, Dog, Sparkles, CheckCircle2, SlidersHorizontal } from "lucide-react";
+import { User, ShoppingBag, Dog, Sparkles, CheckCircle2, SlidersHorizontal, Car, Building2, Smile } from "lucide-react";
 import { UploadZone } from "@/components/upload/UploadZone";
 
 interface HeroSectionProps {
@@ -10,13 +10,31 @@ interface HeroSectionProps {
 
 const HERO_DEMOS = [
   {
-    id: "person",
-    name: "People",
-    subtitle: "Portrait & Flyaway Hair",
-    url: "/samples/sample-person.jpg",
-    cutoutUrl: "/samples/sample-person-cutout.png",
-    icon: User,
-    desc: "Sub-pixel isolation preserving natural flyaway hair, clothing fibers, and shoulder silhouettes.",
+    id: "woman",
+    name: "Portraits",
+    subtitle: "21yo Natural Sunlight Portrait",
+    url: "/samples/sample-woman.jpg",
+    cutoutUrl: "/samples/sample-woman-cutout.png",
+    icon: Smile,
+    desc: "Flawless portrait matting preserving fine flyaway hair strands, sweater texture, and soft natural sunlight.",
+  },
+  {
+    id: "skyline",
+    name: "Mumbai Skyline",
+    subtitle: "Sea Link & Coastal Towers",
+    url: "/samples/sample-skyline.jpg",
+    cutoutUrl: "/samples/sample-skyline-cutout.png",
+    icon: Building2,
+    desc: "Complex architectural isolation separating suspension cables, concrete piers, and skyline from the twilight sky.",
+  },
+  {
+    id: "car",
+    name: "Automotive",
+    subtitle: "Coastal Sports Coupe",
+    url: "/samples/sample-car.jpg",
+    cutoutUrl: "/samples/sample-car-cutout.png",
+    icon: Car,
+    desc: "High-precision automotive cutouts isolating chassis contours, rims, and glass reflections from outdoor scenery.",
   },
   {
     id: "product",
@@ -36,10 +54,19 @@ const HERO_DEMOS = [
     icon: Dog,
     desc: "Seamless texture matting separating fine fur strands and whiskers from busy backgrounds.",
   },
+  {
+    id: "person",
+    name: "Studio",
+    subtitle: "Studio Model & Silhouette",
+    url: "/samples/sample-person.jpg",
+    cutoutUrl: "/samples/sample-person-cutout.png",
+    icon: User,
+    desc: "Sub-pixel isolation preserving natural flyaway hair, clothing fibers, and shoulder silhouettes.",
+  },
 ];
 
 export function HeroSection({ onFileSelected }: HeroSectionProps) {
-  const [activeTab, setActiveTab] = useState<string>("person");
+  const [activeTab, setActiveTab] = useState<string>("woman");
   const [sliderPos, setSliderPos] = useState<number>(50);
 
   const activeDemo = HERO_DEMOS.find((d) => d.id === activeTab) || HERO_DEMOS[0];
@@ -86,9 +113,9 @@ export function HeroSection({ onFileSelected }: HeroSectionProps) {
         {/* Picsart-Style Grand Enlarged Interactive Showcase Window (max-w-6xl) */}
         <div className="w-full max-w-5xl xl:max-w-6xl mx-auto rounded-3xl border border-slate-200/90 bg-white p-4 sm:p-6 shadow-xl space-y-4">
           {/* Showcase Header with Category Tabs */}
-          <div className="flex flex-col sm:flex-row items-center justify-between gap-4 border-b border-slate-100 pb-4">
-            <div className="flex items-center gap-2">
-              <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-blue-50 text-blue-600 border border-blue-200">
+          <div className="flex flex-col lg:flex-row items-center justify-between gap-4 border-b border-slate-100 pb-4">
+            <div className="flex items-center gap-2 self-start lg:self-center">
+              <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-blue-50 text-blue-600 border border-blue-200 shrink-0">
                 <SlidersHorizontal className="h-4 w-4" />
               </div>
               <div>
@@ -101,8 +128,8 @@ export function HeroSection({ onFileSelected }: HeroSectionProps) {
               </div>
             </div>
 
-            {/* Category Tabs (People, Products, Animals) */}
-            <div className="flex items-center gap-1.5 rounded-xl bg-slate-100 p-1 border border-slate-200">
+            {/* Category Tabs (Portraits, Skyline, Automotive, Products, Animals, Studio) */}
+            <div className="flex items-center gap-1 sm:gap-1.5 rounded-xl bg-slate-100 p-1 border border-slate-200 overflow-x-auto max-w-full">
               {HERO_DEMOS.map((demo) => {
                 const Icon = demo.icon;
                 const isActive = activeTab === demo.id;
@@ -111,10 +138,10 @@ export function HeroSection({ onFileSelected }: HeroSectionProps) {
                     key={demo.id}
                     type="button"
                     onClick={() => setActiveTab(demo.id)}
-                    className={`flex items-center gap-2 rounded-lg px-3.5 py-1.5 text-xs font-bold transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 ${
+                    className={`flex items-center gap-1.5 sm:gap-2 shrink-0 rounded-lg px-2.5 sm:px-3.5 py-1.5 text-xs font-bold transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 ${
                       isActive
                         ? "bg-white text-blue-700 shadow-sm"
-                        : "text-slate-600 hover:text-slate-900"
+                        : "text-slate-600 hover:text-slate-900 hover:bg-slate-200/50"
                     }`}
                   >
                     <Icon className="h-3.5 w-3.5" />

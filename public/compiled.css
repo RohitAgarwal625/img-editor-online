@@ -1102,6 +1102,9 @@
   :where(.divide-slate-100 > :not(:last-child)) {
     border-color: var(--color-slate-100);
   }
+  .self-start {
+    align-self: flex-start;
+  }
   .truncate {
     overflow: hidden;
     text-overflow: ellipsis;
@@ -2284,6 +2287,14 @@
     .hover\:bg-slate-200:hover {
       background-color: var(--color-slate-200);
     }
+    .hover\:bg-slate-200\/50:hover {
+      background-color: color-mix(in srgb, oklch(92.9% 0.013 255.508) 50%, transparent);
+    }
+    @supports (color: color-mix(in lab, red, red)) {
+      .hover\:bg-slate-200\/50:hover {
+        background-color: color-mix(in oklab, var(--color-slate-200) 50%, transparent);
+      }
+    }
     .hover\:bg-zinc-700:hover {
       background-color: var(--color-zinc-700);
     }
@@ -2474,6 +2485,12 @@
     .sm\:flex-row {
       flex-direction: row;
     }
+    .sm\:gap-1\.5 {
+      gap: calc(var(--spacing) * 1.5);
+    }
+    .sm\:gap-2 {
+      gap: calc(var(--spacing) * 2);
+    }
     .sm\:gap-6 {
       gap: calc(var(--spacing) * 6);
     }
@@ -2488,6 +2505,9 @@
     }
     .sm\:p-10 {
       padding: calc(var(--spacing) * 10);
+    }
+    .sm\:px-3\.5 {
+      padding-inline: calc(var(--spacing) * 3.5);
     }
     .sm\:px-6 {
       padding-inline: calc(var(--spacing) * 6);
@@ -2663,6 +2683,9 @@
     }
     .lg\:gap-12 {
       gap: calc(var(--spacing) * 12);
+    }
+    .lg\:self-center {
+      align-self: center;
     }
     .lg\:overflow-visible {
       overflow: visible;

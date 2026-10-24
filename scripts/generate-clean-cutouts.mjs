@@ -6,12 +6,19 @@ async function main() {
   const { removeBackground } = await import('@imgly/background-removal-node');
 
   const samples = [
+    { in: 'public/samples/sample-woman.jpg', out: 'public/samples/sample-woman-cutout.png', name: 'Portrait (Young Woman)' },
+    { in: 'public/samples/sample-car.jpg', out: 'public/samples/sample-car-cutout.png', name: 'Automotive (Sports Car)' },
+    { in: 'public/samples/sample-skyline.jpg', out: 'public/samples/sample-skyline-cutout.png', name: 'Skyline (Mumbai Sea Link)' },
     { in: 'public/samples/sample-product.jpg', out: 'public/samples/sample-product-cutout.png', name: 'Products (Headphones)' },
-    { in: 'public/samples/sample-person.jpg', out: 'public/samples/sample-person-cutout.png', name: 'People (Portrait)' },
+    { in: 'public/samples/sample-person.jpg', out: 'public/samples/sample-person-cutout.png', name: 'People (Portrait Studio)' },
     { in: 'public/samples/sample-animal.jpg', out: 'public/samples/sample-animal-cutout.png', name: 'Animals (Golden Retriever)' },
   ];
 
   for (const sample of samples) {
+    if (!fs.existsSync(sample.in)) {
+      console.warn(`File not found: ${sample.in}, skipping.`);
+      continue;
+    }
     console.log(`\n[AI Inference] Processing ${sample.name}...`);
     const startTime = Date.now();
     const blob = await removeBackground(sample.in, {
