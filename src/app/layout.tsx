@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://removebg.app"),
+  metadataBase: new URL("https://removebg-online.vercel.app"),
   title: "RemoveBG — Remove Image Background Free Online | AI-Powered",
   description:
     "Remove image backgrounds instantly and for free. 100% AI-powered, runs entirely in your browser — your images never leave your device. Best remove.bg alternative.",
@@ -15,6 +15,9 @@ export const metadata: Metadata = {
   ],
   icons: {
     icon: "/favicon.ico",
+  },
+  verification: {
+    google: "J6hGqVfAWQaOrQIO0Xs-LO0RKQuKkfTrYdeAk2VJ5mE",
   },
   openGraph: {
     title: "RemoveBG — Free AI Background Remover",
