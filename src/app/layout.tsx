@@ -1,35 +1,83 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import "./globals.css";
+
+export const viewport: Viewport = {
+  themeColor: "#2563eb",
+  width: "device-width",
+  initialScale: 1,
+  maximumScale: 5,
+};
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://removebg-online.vercel.app"),
-  title: "RemoveBG — Remove Image Background Free Online | AI-Powered",
+  title: {
+    default: "Free AI Background Remover Online | RemoveBG Online",
+    template: "%s | RemoveBG Online",
+  },
   description:
-    "Remove image backgrounds instantly and for free. 100% AI-powered, runs entirely in your browser — your images never leave your device. Best remove.bg alternative.",
+    "Remove image backgrounds online with AI. Upload your photo and get a clean transparent background in seconds. Fast, simple and easy to use.",
+  applicationName: "RemoveBG Online",
   keywords: [
-    "remove background",
-    "remove.bg alternative",
-    "background remover",
-    "free background removal",
-    "AI background remover",
+    "free AI background remover online",
+    "remove image background online",
+    "remove background transparent",
+    "AI background removal",
+    "remove bg online free",
+    "remove.bg alternative free",
+    "ecommerce white background",
+    "product photo background remover",
+    "in browser background remover",
+    "transparent png maker",
   ],
+  authors: [{ name: "RemoveBG Online", url: "https://removebg-online.vercel.app" }],
+  creator: "RemoveBG Online",
+  publisher: "RemoveBG Online",
+  alternates: {
+    canonical: "https://removebg-online.vercel.app/",
+  },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      "max-video-preview": -1,
+      "max-image-preview": "large",
+      "max-snippet": -1,
+    },
+  },
   icons: {
     icon: "/favicon.ico",
+    shortcut: "/favicon.ico",
+    apple: "/favicon.ico",
   },
   verification: {
     google: "J6hGqVfAWQaOrQIO0Xs-LO0RKQuKkfTrYdeAk2VJ5mE",
   },
   openGraph: {
-    title: "RemoveBG — Free AI Background Remover",
-    description: "AI-powered background removal. Free, private, instant.",
-    images: ["/og-image.jpg"],
     type: "website",
+    locale: "en_US",
+    url: "https://removebg-online.vercel.app/",
+    siteName: "RemoveBG Online",
+    title: "Free AI Background Remover Online | RemoveBG Online",
+    description:
+      "Remove image backgrounds online with AI. Upload your photo and get a clean transparent background in seconds. Fast, simple and easy to use.",
+    images: [
+      {
+        url: "/og-image.png",
+        width: 1200,
+        height: 630,
+        alt: "RemoveBG Online - Free AI Background Remover",
+        type: "image/png",
+      },
+    ],
   },
   twitter: {
     card: "summary_large_image",
-    title: "RemoveBG — Free AI Background Remover",
-    description: "Remove image backgrounds in seconds. Free. Private. No signup.",
-    images: ["/og-image.jpg"],
+    title: "Free AI Background Remover Online | RemoveBG Online",
+    description:
+      "Remove image backgrounds online with AI. Upload your photo and get a clean transparent background in seconds. Fast, simple and easy to use.",
+    images: ["/og-image.png"],
   },
 };
 
@@ -49,4 +97,3 @@ export default function RootLayout({
     </html>
   );
 }
-

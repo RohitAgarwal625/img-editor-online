@@ -73,11 +73,11 @@ export function HeroSection({ onFileSelected }: HeroSectionProps) {
           </div>
 
           <h1 className="text-3xl sm:text-5xl md:text-6xl font-black tracking-tight text-slate-900 leading-[1.1]">
-            Remove Image Background
+            Free AI Background Remover Online
           </h1>
 
           <p className="text-lg sm:text-xl font-semibold text-slate-600">
-            100% Automatically and <span className="text-blue-600">Free</span>
+            100% Automatically and <span className="text-blue-600">Free</span> • Privacy-First In-Browser AI
           </p>
 
           <div className="flex flex-wrap items-center justify-center gap-4 sm:gap-6 pt-1 text-xs sm:text-sm text-slate-600 font-medium">
@@ -110,9 +110,9 @@ export function HeroSection({ onFileSelected }: HeroSectionProps) {
                 <SlidersHorizontal className="h-4 w-4" />
               </div>
               <div>
-                <h3 className="text-sm sm:text-base font-bold text-slate-900">
+                <h2 className="text-sm sm:text-base font-bold text-slate-900">
                   Interactive Before / After Showcase
-                </h3>
+                </h2>
                 <p className="text-xs text-slate-500 hidden sm:block">
                   Drag the slider to inspect edge transparency and hair separation
                 </p>
@@ -149,7 +149,7 @@ export function HeroSection({ onFileSelected }: HeroSectionProps) {
             <div className="absolute inset-0 w-full h-full flex items-center justify-center checkerboard-pattern">
               <img
                 src={activeDemo.cutoutUrl}
-                alt={`${activeDemo.name} cutout preview`}
+                alt={`${activeDemo.name} - AI background removed cutout with transparent background`}
                 className="w-full h-full object-contain filter drop-shadow-[0_12px_28px_rgba(0,0,0,0.22)] p-4 sm:p-8 select-none pointer-events-none"
               />
               <div className="absolute top-4 right-4 rounded-full bg-white/95 backdrop-blur-md px-3.5 py-1 text-xs font-extrabold text-emerald-700 shadow-sm border border-emerald-200 flex items-center gap-1.5">
@@ -168,7 +168,7 @@ export function HeroSection({ onFileSelected }: HeroSectionProps) {
             >
               <img
                 src={activeDemo.url}
-                alt={`${activeDemo.name} original`}
+                alt={`${activeDemo.name} - Original photograph before background removal`}
                 className="w-full h-full object-contain p-4 sm:p-8 select-none pointer-events-none"
               />
               <div className="absolute top-4 left-4 rounded-full bg-slate-900/90 backdrop-blur-md px-3.5 py-1 text-xs font-extrabold text-white shadow-sm border border-slate-700">

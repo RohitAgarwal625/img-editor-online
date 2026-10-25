@@ -202,7 +202,7 @@ export function UploadZone({ onFileSelected, disabled = false }: UploadZoneProps
               <div className="h-9 w-9 rounded-md overflow-hidden bg-slate-200 shrink-0 border border-slate-300">
                 <img
                   src={sample.url}
-                  alt={sample.name}
+                  alt={`${sample.name} sample photo for background removal`}
                   className="h-full w-full object-cover group-hover:scale-105 transition-transform"
                 />
               </div>

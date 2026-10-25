@@ -11,7 +11,6 @@ import {
   Sparkles,
   ZoomIn,
   ZoomOut,
-  RotateCcw,
 } from "lucide-react";
 import { BeforeAfterSlider } from "./BeforeAfterSlider";
 import { BackgroundColorPicker } from "./BackgroundColorPicker";
