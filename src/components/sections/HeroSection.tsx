@@ -12,11 +12,11 @@ const HERO_DEMOS = [
   {
     id: "woman",
     name: "Portraits",
-    subtitle: "High-Fashion Beauty & Hair",
+    subtitle: "Natural Elegance & Hair Matting",
     url: "/samples/sample-woman.jpg",
     cutoutUrl: "/samples/sample-woman-cutout.png",
     icon: Smile,
-    desc: "Flawless portrait matting preserving individual silky hair strands and shoulder contours with zero color fringe.",
+    desc: "Flawless portrait matting preserving delicate flyaway hair strands, fabric textures, and natural skin contours with zero color fringe.",
   },
   {
     id: "car",
@@ -25,7 +25,7 @@ const HERO_DEMOS = [
     url: "/samples/sample-car.jpg",
     cutoutUrl: "/samples/sample-car-cutout.png",
     icon: Car,
-    desc: "High-precision automotive cutouts isolating chassis contours and wheels while preserving authentic ground contact shadows.",
+    desc: "High-precision automotive cutouts isolating chassis contours, rims, and glass reflections from outdoor scenery.",
   },
   {
     id: "product",
