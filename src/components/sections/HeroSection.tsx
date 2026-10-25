@@ -25,7 +25,7 @@ const HERO_DEMOS = [
     url: "/samples/sample-car.jpg",
     cutoutUrl: "/samples/sample-car-cutout.png",
     icon: Car,
-    desc: "High-precision automotive cutouts isolating chassis contours, rims, and glass reflections from outdoor scenery.",
+    desc: "High-precision automotive cutouts isolating chassis contours and wheels while preserving authentic ground contact shadows.",
   },
   {
     id: "product",
