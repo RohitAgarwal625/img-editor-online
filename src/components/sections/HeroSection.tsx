@@ -1,8 +1,9 @@
 "use client";
 
 import React, { useState } from "react";
-import { User, ShoppingBag, Dog, Sparkles, CheckCircle2, SlidersHorizontal, Car, Smile } from "lucide-react";
+import { User, ShoppingBag, Dog, Sparkles, CheckCircle2, SlidersHorizontal, Car, Smile, Layers } from "lucide-react";
 import { UploadZone } from "@/components/upload/UploadZone";
+import { ModelComparisonGrid } from "@/components/comparison/ModelComparisonGrid";
 
 interface HeroSectionProps {
   onFileSelected: (file: File) => void;
@@ -13,15 +14,18 @@ const HERO_DEMOS = [
     id: "woman",
     name: "Portraits",
     subtitle: "Natural Elegance & Hair Matting",
+    algorithm: "MODNet AI Matting (0.17s)",
+    tag: "MODNet Live",
     url: "/samples/sample-woman.jpg",
     cutoutUrl: "/samples/sample-woman-cutout.png",
     icon: Smile,
-    desc: "Flawless portrait matting preserving delicate flyaway hair strands, fabric textures, and natural skin contours with zero color fringe.",
+    desc: "Powered live by MODNet (Real-Time Portrait Matting via Objective Decomposition). Separates fine flyaway hair strands with true sub-pixel continuous alpha matting.",
   },
   {
     id: "car",
     name: "Automotive",
     subtitle: "Coastal Sports Coupe",
+    algorithm: "IS-Net / DIS Neural Model",
     url: "/samples/sample-car.jpg",
     cutoutUrl: "/samples/sample-car-cutout.png",
     icon: Car,
@@ -31,6 +35,7 @@ const HERO_DEMOS = [
     id: "product",
     name: "Products",
     subtitle: "Amazon & Shopify Ready",
+    algorithm: "IS-Net / DIS Neural Model",
     url: "/samples/sample-product.jpg",
     cutoutUrl: "/samples/sample-product-cutout.png",
     icon: ShoppingBag,
@@ -40,6 +45,7 @@ const HERO_DEMOS = [
     id: "animal",
     name: "Animals",
     subtitle: "Complex Fur & Whiskers",
+    algorithm: "IS-Net / DIS Neural Model",
     url: "/samples/sample-animal.jpg",
     cutoutUrl: "/samples/sample-animal-cutout.png",
     icon: Dog,
@@ -49,6 +55,7 @@ const HERO_DEMOS = [
     id: "person",
     name: "Studio",
     subtitle: "Studio Model & Silhouette",
+    algorithm: "IS-Net / DIS Neural Model",
     url: "/samples/sample-person.jpg",
     cutoutUrl: "/samples/sample-person-cutout.png",
     icon: User,
@@ -59,6 +66,7 @@ const HERO_DEMOS = [
 export function HeroSection({ onFileSelected }: HeroSectionProps) {
   const [activeTab, setActiveTab] = useState<string>("woman");
   const [sliderPos, setSliderPos] = useState<number>(50);
+  const [showcaseMode, setShowcaseMode] = useState<"slider" | "compare">("slider");
 
   const activeDemo = HERO_DEMOS.find((d) => d.id === activeTab) || HERO_DEMOS[0];
 
@@ -103,113 +111,182 @@ export function HeroSection({ onFileSelected }: HeroSectionProps) {
 
         {/* Picsart-Style Grand Enlarged Interactive Showcase Window (max-w-6xl) */}
         <div className="w-full max-w-5xl xl:max-w-6xl mx-auto rounded-3xl border border-slate-200/90 bg-white p-4 sm:p-6 shadow-xl space-y-4">
-          {/* Showcase Header with Category Tabs */}
-          <div className="flex flex-col lg:flex-row items-center justify-between gap-4 border-b border-slate-100 pb-4">
-            <div className="flex items-center gap-2 self-start lg:self-center">
-              <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-blue-50 text-blue-600 border border-blue-200 shrink-0">
-                <SlidersHorizontal className="h-4 w-4" />
-              </div>
-              <div>
-                <h2 className="text-sm sm:text-base font-bold text-slate-900">
-                  Interactive Before / After Showcase
-                </h2>
-                <p className="text-xs text-slate-500 hidden sm:block">
-                  Drag the slider to inspect edge transparency and hair separation
-                </p>
-              </div>
-            </div>
-
-            {/* Category Tabs (Portraits, Skyline, Automotive, Products, Animals, Studio) */}
-            <div className="flex items-center gap-1 sm:gap-1.5 rounded-xl bg-slate-100 p-1 border border-slate-200 overflow-x-auto max-w-full">
-              {HERO_DEMOS.map((demo) => {
-                const Icon = demo.icon;
-                const isActive = activeTab === demo.id;
-                return (
-                  <button
-                    key={demo.id}
-                    type="button"
-                    onClick={() => setActiveTab(demo.id)}
-                    className={`flex items-center gap-1.5 sm:gap-2 shrink-0 rounded-lg px-2.5 sm:px-3.5 py-1.5 text-xs font-bold transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 ${
-                      isActive
-                        ? "bg-white text-blue-700 shadow-sm"
-                        : "text-slate-600 hover:text-slate-900 hover:bg-slate-200/50"
-                    }`}
-                  >
-                    <Icon className="h-3.5 w-3.5" />
-                    <span>{demo.name}</span>
-                  </button>
-                );
-              })}
-            </div>
-          </div>
-
-          {/* Massive Enlarged Showcase Canvas (h-[480px] to h-[620px]) */}
-          <div className="relative h-[440px] sm:h-[540px] md:h-[620px] w-full rounded-2xl overflow-hidden select-none border border-slate-200 bg-white shadow-inner">
-            {/* 1. Background Layer: Transparent Cutout on Checkerboard */}
-            <div className="absolute inset-0 w-full h-full flex items-center justify-center checkerboard-pattern">
-              <img
-                src={activeDemo.cutoutUrl}
-                alt={`${activeDemo.name} - AI background removed cutout with transparent background`}
-                className="w-full h-full object-contain filter drop-shadow-[0_12px_28px_rgba(0,0,0,0.22)] p-4 sm:p-8 select-none pointer-events-none"
-              />
-              <div className="absolute top-4 right-4 rounded-full bg-white/95 backdrop-blur-md px-3.5 py-1 text-xs font-extrabold text-emerald-700 shadow-sm border border-emerald-200 flex items-center gap-1.5">
-                <span className="h-2 w-2 rounded-full bg-emerald-500 animate-pulse" />
-                <span>Transparent Cutout</span>
-              </div>
-            </div>
-
-            {/* 2. Foreground Layer: Original Image (Kept perfectly stationary with clipPath) */}
-            <div
-              className="absolute inset-0 w-full h-full flex items-center justify-center bg-slate-100 pointer-events-none"
-              style={{
-                clipPath: `inset(0 ${100 - sliderPos}% 0 0)`,
-                WebkitClipPath: `inset(0 ${100 - sliderPos}% 0 0)`,
-              }}
-            >
-              <img
-                src={activeDemo.url}
-                alt={`${activeDemo.name} - Original photograph before background removal`}
-                className="w-full h-full object-contain p-4 sm:p-8 select-none pointer-events-none"
-              />
-              <div className="absolute top-4 left-4 rounded-full bg-slate-900/90 backdrop-blur-md px-3.5 py-1 text-xs font-extrabold text-white shadow-sm border border-slate-700">
-                Original Image
-              </div>
-            </div>
-
-            {/* 3. Range Input for Fluid Dragging */}
-            <input
-              type="range"
-              min="0"
-              max="100"
-              value={sliderPos}
-              onChange={(e) => setSliderPos(Number(e.target.value))}
-              className="absolute inset-0 w-full h-full opacity-0 cursor-ew-resize z-30"
-              aria-label="Before and after split slider"
-            />
-
-            {/* 4. Split Divider Line & Prominent Drag Handle */}
-            <div
-              className="absolute top-0 bottom-0 z-20 w-0.5 bg-white shadow-lg pointer-events-none"
-              style={{ left: `${sliderPos}%` }}
-            >
-              <div className="absolute top-1/2 -translate-y-1/2 -translate-x-1/2 flex h-10 w-10 items-center justify-center rounded-full bg-white text-slate-800 shadow-xl border border-slate-300">
-                <div className="flex items-center gap-0.5 text-[10px] font-black text-slate-600 select-none">
-                  <span>◀</span>
-                  <span>▶</span>
+          {/* Showcase Header with Mode Switcher & Category Tabs */}
+          <div className="flex flex-col xl:flex-row items-center justify-between gap-4 border-b border-slate-100 pb-4">
+            <div className="flex flex-wrap items-center justify-between w-full xl:w-auto gap-3">
+              <div className="flex items-center gap-2">
+                <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-blue-50 text-blue-600 border border-blue-200 shrink-0">
+                  <SlidersHorizontal className="h-4 w-4" />
+                </div>
+                <div>
+                  <h2 className="text-sm sm:text-base font-bold text-slate-900">
+                    Interactive Before / After Showcase
+                  </h2>
+                  <p className="text-xs text-slate-500 hidden sm:block">
+                    {showcaseMode === "slider"
+                      ? "Drag the slider to inspect edge transparency and hair separation"
+                      : "Side-by-side comparison of IS-Net vs MODNet vs BiRefNet"}
+                  </p>
                 </div>
               </div>
+
+              {/* Showcase Mode Toggle */}
+              <div className="flex items-center rounded-xl bg-slate-100 p-1 border border-slate-200">
+                <button
+                  type="button"
+                  onClick={() => setShowcaseMode("slider")}
+                  className={`flex items-center gap-1.5 rounded-lg px-2.5 sm:px-3 py-1 text-xs font-bold transition-all ${
+                    showcaseMode === "slider"
+                      ? "bg-white text-blue-700 shadow-xs"
+                      : "text-slate-600 hover:text-slate-900"
+                  }`}
+                >
+                  <SlidersHorizontal className="h-3.5 w-3.5" />
+                  <span>Before / After</span>
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setShowcaseMode("compare")}
+                  className={`flex items-center gap-1.5 rounded-lg px-2.5 sm:px-3 py-1 text-xs font-bold transition-all ${
+                    showcaseMode === "compare"
+                      ? "bg-blue-600 text-white shadow-xs"
+                      : "text-slate-600 hover:text-slate-900"
+                  }`}
+                >
+                  <Sparkles className="h-3.5 w-3.5" />
+                  <span>5-Model Showdown</span>
+                  <span className="rounded-full bg-blue-500/20 px-1.5 py-0.2 text-[9px] font-black uppercase text-blue-200">
+                    5 Models
+                  </span>
+                </button>
+              </div>
             </div>
+
+            {/* Category Tabs (shown in slider mode) */}
+            {showcaseMode === "slider" && (
+              <div className="flex items-center gap-1 sm:gap-1.5 rounded-xl bg-slate-100 p-1 border border-slate-200 overflow-x-auto max-w-full self-start xl:self-auto">
+                {HERO_DEMOS.map((demo) => {
+                  const Icon = demo.icon;
+                  const isActive = activeTab === demo.id;
+                  return (
+                    <button
+                      key={demo.id}
+                      type="button"
+                      onClick={() => setActiveTab(demo.id)}
+                      className={`flex items-center gap-1.5 sm:gap-2 shrink-0 rounded-lg px-2.5 sm:px-3.5 py-1.5 text-xs font-bold transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 ${
+                        isActive
+                          ? "bg-white text-blue-700 shadow-sm"
+                          : "text-slate-600 hover:text-slate-900 hover:bg-slate-200/50"
+                      }`}
+                    >
+                      <Icon className="h-3.5 w-3.5" />
+                      <span>{demo.name}</span>
+                      {demo.tag && (
+                        <span className="rounded-full bg-blue-100 text-blue-700 px-1.5 py-0.5 text-[9px] font-black uppercase tracking-wider">
+                          {demo.tag}
+                        </span>
+                      )}
+                    </button>
+                  );
+                })}
+              </div>
+            )}
           </div>
 
-          {/* Showcase Footer Note */}
-          <div className="flex flex-col sm:flex-row items-center justify-between gap-2 text-xs text-slate-500 pt-1 px-1">
-            <span className="font-medium text-slate-700">
-              {activeDemo.desc}
-            </span>
-            <span className="text-[11px] text-slate-400">
-              Drag divider left or right to inspect sub-pixel boundary quality
-            </span>
-          </div>
+          {/* Conditional View: 5-Model Showdown OR Split Slider */}
+          {showcaseMode === "compare" ? (
+            <div className="pt-2">
+              <ModelComparisonGrid
+                originalUrl="/samples/sample-woman.jpg"
+                isNetUrl="/samples/sample-woman-isnet.png"
+                modnetUrl="/samples/sample-woman-modnet.png"
+                birefnetUrl="/samples/sample-woman-birefnet.png"
+                hybridFusionUrl="/samples/sample-woman-hybrid-fusion.png"
+                isnetGuidedUrl="/samples/sample-woman-isnet-guided.png"
+                activeModelId="hybrid-fusion"
+                showSelector={false}
+              />
+            </div>
+          ) : (
+            <>
+              {/* Massive Enlarged Showcase Canvas (h-[480px] to h-[620px]) */}
+              <div className="relative h-[440px] sm:h-[540px] md:h-[620px] w-full rounded-2xl overflow-hidden select-none border border-slate-200 bg-white shadow-inner">
+                {/* 1. Background Layer: Transparent Cutout on Checkerboard */}
+                <div className="absolute inset-0 w-full h-full flex items-center justify-center checkerboard-pattern">
+                  <img
+                    src={activeDemo.cutoutUrl}
+                    alt={`${activeDemo.name} - AI background removed cutout with transparent background`}
+                    className="w-full h-full object-contain filter drop-shadow-[0_12px_28px_rgba(0,0,0,0.22)] p-4 sm:p-8 select-none pointer-events-none"
+                  />
+                  <div className="absolute top-4 right-4 flex items-center gap-2">
+                    {activeDemo.algorithm && (
+                      <div className="rounded-full bg-slate-900/90 backdrop-blur-md px-3 py-1 text-xs font-bold text-cyan-300 shadow-sm border border-cyan-500/30 flex items-center gap-1.5">
+                        <span className="h-1.5 w-1.5 rounded-full bg-cyan-400 animate-pulse" />
+                        <span>{activeDemo.algorithm}</span>
+                      </div>
+                    )}
+                    <div className="rounded-full bg-white/95 backdrop-blur-md px-3.5 py-1 text-xs font-extrabold text-emerald-700 shadow-sm border border-emerald-200 flex items-center gap-1.5">
+                      <span className="h-2 w-2 rounded-full bg-emerald-500 animate-pulse" />
+                      <span>Transparent Cutout</span>
+                    </div>
+                  </div>
+                </div>
+
+                {/* 2. Foreground Layer: Original Image (Kept perfectly stationary with clipPath) */}
+                <div
+                  className="absolute inset-0 w-full h-full flex items-center justify-center bg-slate-100 pointer-events-none"
+                  style={{
+                    clipPath: `inset(0 ${100 - sliderPos}% 0 0)`,
+                    WebkitClipPath: `inset(0 ${100 - sliderPos}% 0 0)`,
+                  }}
+                >
+                  <img
+                    src={activeDemo.url}
+                    alt={`${activeDemo.name} - Original photograph before background removal`}
+                    className="w-full h-full object-contain p-4 sm:p-8 select-none pointer-events-none"
+                  />
+                  <div className="absolute top-4 left-4 rounded-full bg-slate-900/90 backdrop-blur-md px-3.5 py-1 text-xs font-extrabold text-white shadow-sm border border-slate-700">
+                    Original Image
+                  </div>
+                </div>
+
+                {/* 3. Range Input for Fluid Dragging */}
+                <input
+                  type="range"
+                  min="0"
+                  max="100"
+                  value={sliderPos}
+                  onChange={(e) => setSliderPos(Number(e.target.value))}
+                  className="absolute inset-0 w-full h-full opacity-0 cursor-ew-resize z-30"
+                  aria-label="Before and after split slider"
+                />
+
+                {/* 4. Split Divider Line & Prominent Drag Handle */}
+                <div
+                  className="absolute top-0 bottom-0 z-20 w-0.5 bg-white shadow-lg pointer-events-none"
+                  style={{ left: `${sliderPos}%` }}
+                >
+                  <div className="absolute top-1/2 -translate-y-1/2 -translate-x-1/2 flex h-10 w-10 items-center justify-center rounded-full bg-white text-slate-800 shadow-xl border border-slate-300">
+                    <div className="flex items-center gap-0.5 text-[10px] font-black text-slate-600 select-none">
+                      <span>◀</span>
+                      <span>▶</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Showcase Footer Note */}
+              <div className="flex flex-col sm:flex-row items-center justify-between gap-2 text-xs text-slate-500 pt-1 px-1">
+                <span className="font-medium text-slate-700 flex items-center gap-1.5">
+                  <span className="h-2 w-2 rounded-full bg-blue-600 shrink-0" />
+                  {activeDemo.desc}
+                </span>
+                <span className="text-[11px] text-slate-400 shrink-0">
+                  Drag divider left or right to inspect sub-pixel boundary quality
+                </span>
+              </div>
+            </>
+          )}
         </div>
       </div>
     </section>
