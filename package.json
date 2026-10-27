@@ -7,7 +7,9 @@
     "dev": "node scripts/compile-css.mjs && next dev --webpack",
     "build": "node scripts/compile-css.mjs && next build --webpack",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "test": "node --test tests/",
+    "bench": "node scripts/benchmark.mjs bg-assets"
   },
   "dependencies": {
     "@imgly/background-removal": "^1.7.0",

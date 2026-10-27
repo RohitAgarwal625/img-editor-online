@@ -15,7 +15,7 @@ export function ProcessingView({
   originalUrl,
   onCancel,
 }: ProcessingViewProps) {
-  const isModelDownload = progress.stage === "loading-model";
+  const showPercent = progress.stage === "init" && progress.percent > 0;
 
   return (
     <div
@@ -36,7 +36,7 @@ export function ProcessingView({
                 AI Background Removal
               </h2>
               <p className="text-xs font-semibold text-blue-600">
-                {isModelDownload ? "Loading neural weights..." : "Transforming image with neural matting..."}
+                {progress.message}{showPercent ? ` ${progress.percent}%` : ""}
               </p>
             </div>
           </div>
@@ -44,7 +44,7 @@ export function ProcessingView({
           <div className="flex items-center gap-3">
             <span className="hidden sm:inline-flex items-center gap-1.5 rounded-full bg-emerald-50 border border-emerald-200 px-3 py-1 text-xs font-semibold text-emerald-800">
               <ShieldCheck className="h-4 w-4 text-emerald-600" />
-              <span>100% In-Browser Privacy</span>
+              <span>Images are not stored</span>
             </span>
 
             <button

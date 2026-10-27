@@ -11,10 +11,12 @@ import {
   Sparkles,
   ZoomIn,
   ZoomOut,
+  Pencil,
 } from "lucide-react";
 import { BeforeAfterSlider } from "./BeforeAfterSlider";
 import { BackgroundColorPicker } from "./BackgroundColorPicker";
 import { DownloadPanel } from "./DownloadPanel";
+import { MaskEditor } from "./MaskEditor";
 import { ModelComparisonGrid, ModelId } from "@/components/comparison/ModelComparisonGrid";
 
 interface ResultsWorkspaceProps {
@@ -26,7 +28,7 @@ interface ResultsWorkspaceProps {
   onReset: () => void;
 }
 
-type ViewMode = "result-only" | "slider" | "side-by-side" | "original" | "compare-models";
+type ViewMode = "result-only" | "slider" | "side-by-side" | "original" | "edit" | "compare-models";
 
 export function ResultsWorkspace({
   originalFile,
@@ -39,10 +41,23 @@ export function ResultsWorkspace({
   const [viewMode, setViewMode] = useState<ViewMode>("result-only");
   const [activeResultUrl, setActiveResultUrl] = useState<string>(resultUrl);
   const [activeResultBlob, setActiveResultBlob] = useState<Blob>(resultBlob);
-  const [selectedEngine, setSelectedEngine] = useState<ModelId>("isnet");
+  const [selectedEngine, setSelectedEngine] = useState<ModelId | "auto">("auto");
   const [backgroundColor, setBackgroundColor] = useState<string>("transparent");
   const [isDarkChecker, setIsDarkChecker] = useState<boolean>(false);
   const [zoomLevel, setZoomLevel] = useState<number>(1);
+  // Developer/benchmark mode: ?dev=1 or NEXT_PUBLIC_DEV_MODE=1
+  const [devMode, setDevMode] = useState(false);
+  useEffect(() => {
+    setDevMode(
+      process.env.NEXT_PUBLIC_DEV_MODE === "1" || new URLSearchParams(window.location.search).has("dev")
+    );
+  }, []);
+
+  const handleEditApplied = (blob: Blob, url: string) => {
+    setActiveResultBlob(blob);
+    setActiveResultUrl(url);
+    setViewMode("result-only");
+  };
 
   const checkerClass = isDarkChecker ? "checkerboard-dark" : "checkerboard-pattern";
 
@@ -73,8 +88,10 @@ export function ResultsWorkspace({
     }
   };
 
-  const getEngineLabel = (engine: ModelId) => {
+  const getEngineLabel = (engine: ModelId | "auto") => {
     switch (engine) {
+      case "auto":
+        return "AI Cutout";
       case "modnet":
         return "MODNet Alpha Matte";
       case "birefnet":
@@ -180,6 +197,21 @@ export function ResultsWorkspace({
             <button
               type="button"
               role="tab"
+              aria-selected={viewMode === "edit"}
+              onClick={() => setViewMode("edit")}
+              className={`flex items-center gap-1.5 rounded-lg px-3 py-1 text-xs font-bold transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 shrink-0 ${
+                viewMode === "edit"
+                  ? "bg-white text-blue-700 shadow-xs"
+                  : "text-slate-600 hover:text-slate-900"
+              }`}
+            >
+              <Pencil className="h-3.5 w-3.5" />
+              <span>Erase / Restore</span>
+            </button>
+            {devMode && (
+            <button
+              type="button"
+              role="tab"
               aria-selected={viewMode === "compare-models"}
               onClick={() => setViewMode("compare-models")}
               className={`flex items-center gap-1.5 rounded-lg px-3 py-1 text-xs font-bold transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 shrink-0 ${
@@ -191,9 +223,10 @@ export function ResultsWorkspace({
               <Sparkles className="h-3.5 w-3.5 text-blue-200" />
               <span>Compare AI Models</span>
               <span className="rounded-full bg-blue-500/30 px-1.5 py-0.2 text-[9px] font-black uppercase text-white">
-                3 Engines
+                Dev
               </span>
             </button>
+            )}
           </div>
 
           {/* Right: Zoom & Grid Theme Controls */}
@@ -256,7 +289,7 @@ export function ResultsWorkspace({
               isNetUrl={resultUrl}
               isNetBlob={resultBlob}
               file={originalFile}
-              activeModelId={selectedEngine}
+              activeModelId={selectedEngine === "auto" ? "isnet" : selectedEngine}
               onSelectModel={handleModelSelected}
               showSelector={true}
             />
@@ -275,6 +308,16 @@ export function ResultsWorkspace({
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
             {/* Main Visual Display (8 Cols on Desktop) */}
             <div className="lg:col-span-8 flex flex-col items-center justify-center">
+              {viewMode === "edit" && (
+                <MaskEditor
+                  originalUrl={originalUrl}
+                  resultUrl={activeResultUrl}
+                  backgroundColor={backgroundColor}
+                  checkerClass={checkerClass}
+                  onApply={handleEditApplied}
+                  onCancel={() => setViewMode("result-only")}
+                />
+              )}
               {viewMode === "result-only" && (
                 <div className="w-full max-w-4xl h-[420px] sm:h-[500px] md:h-[560px] rounded-2xl overflow-hidden border border-slate-200 bg-white shadow-md relative flex items-center justify-center">
                   <div
@@ -314,7 +357,7 @@ export function ResultsWorkspace({
                       Drag split divider or use <kbd className="px-1.5 py-0.5 rounded bg-white border border-slate-300 text-slate-700 font-mono text-[11px]">←</kbd> <kbd className="px-1.5 py-0.5 rounded bg-white border border-slate-300 text-slate-700 font-mono text-[11px]">→</kbd> keys
                     </span>
                     <span className="font-semibold text-slate-700">
-                      Engine: {selectedEngine.toUpperCase()}
+                      Engine: {getEngineLabel(selectedEngine)}
                     </span>
                   </div>
                 </div>
@@ -353,7 +396,7 @@ export function ResultsWorkspace({
                   <div className="rounded-2xl border border-slate-200 bg-white overflow-hidden shadow-sm">
                     <div className="px-4 py-2.5 bg-slate-50 border-b border-slate-200 flex items-center justify-between text-xs font-bold text-emerald-700">
                       <span>
-                        AI Cutout ({selectedEngine.toUpperCase()})
+                        {getEngineLabel(selectedEngine)}
                       </span>
                     </div>
                     <div
