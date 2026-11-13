@@ -1,0 +1,9 @@
+node_modules
+.next
+.git
+models
+bench-out
+bg-assets
+*.onnx
+*.log
+.env*

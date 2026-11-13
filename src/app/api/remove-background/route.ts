@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 // Engine is plain ESM so it can be shared by the API, benchmark and tests.
 import { removeBackground, warmup, EngineError } from "@/lib/engine/pipeline.mjs";
+import { withCors, corsHeaders } from "@/lib/cors";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -10,7 +11,15 @@ const MAX_BYTES = 30 * 1024 * 1024;
 // Load model at server start so requests never pay cold-init cost.
 warmup().catch((e: unknown) => console.error("[engine] warmup failed:", e));
 
+export function OPTIONS(req: NextRequest) {
+  return new Response(null, { status: 204, headers: corsHeaders(req.headers.get("origin")) });
+}
+
 export async function POST(req: NextRequest) {
+  return withCors(await handle(req), req.headers.get("origin"));
+}
+
+async function handle(req: NextRequest): Promise<Response> {
   const tRecv = Date.now();
   try {
     let buffer: Buffer | null = null;

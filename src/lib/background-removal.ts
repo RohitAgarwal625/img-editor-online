@@ -32,17 +32,27 @@ export async function removeImageBackground(
   } catch (err) {
     const status = (err as { status?: number }).status;
     // Client errors (bad/oversized image) must not silently fall back.
-    if (status && status >= 400 && status < 500 && status !== 404) throw err;
+    const clientError = status && status >= 400 && status < 500 && status !== 404 && status !== 413;
+    if (clientError || !ALLOW_BROWSER_FALLBACK) {
+      const msg = clientError ? (err as Error).message : "Background removal engine is unavailable. Please try again shortly.";
+      onProgress?.({ stage: "error", percent: 0, message: msg });
+      throw clientError ? err : Object.assign(new Error(msg), { status, cause: err });
+    }
     console.warn("[bg] server engine unavailable, using browser fallback:", err);
     return { ...(await removeImageBackgroundInBrowser(imageSource, onProgress)), engine: "browser" };
   }
 }
 
+/** Base URL of the engine server (e.g. https://engine.up.railway.app). Empty = same origin. */
+const ENGINE_URL = (process.env.NEXT_PUBLIC_ENGINE_URL || "").replace(/\/$/, "");
+/** Weaker in-browser IS-Net is used only when explicitly enabled. */
+const ALLOW_BROWSER_FALLBACK = process.env.NEXT_PUBLIC_ALLOW_BROWSER_FALLBACK === "1";
+
 function removeViaServer(file: Blob, onProgress?: ProgressCallback) {
   return new Promise<RemovalResult & { timings?: EngineTimings }>((resolve, reject) => {
     const xhr = new XMLHttpRequest();
     const t0 = performance.now();
-    xhr.open("POST", "/api/remove-background");
+    xhr.open("POST", `${ENGINE_URL}/api/remove-background`);
     xhr.responseType = "blob";
     xhr.upload.onprogress = (e) => {
       if (e.lengthComputable)

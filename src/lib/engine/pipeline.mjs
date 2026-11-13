@@ -46,7 +46,13 @@ export async function getSession(id) {
   if (sessions.has(id)) return sessions.get(id);
   const p = (async () => {
     const file = modelPath(id);
-    if (!fs.existsSync(file)) throw new EngineError("MODEL_MISSING", `Model weights not found: ${file}`);
+    if (!fs.existsSync(file)) {
+      throw new EngineError(
+        "MODEL_MISSING",
+        `Model weights not found: ${file}. Run "npm run fetch-models" (set MODEL_URL_* env vars) or set ENGINE_MODEL_DIR.`,
+        503,
+      );
+    }
     const o = await ort();
     const opts = { graphOptimizationLevel: "all", intraOpNumThreads: os.cpus().length };
     const eps = providerList();

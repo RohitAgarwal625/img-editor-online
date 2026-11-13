@@ -43,3 +43,9 @@ next-env.d.ts
 # IDE
 .idea/
 
+# model weights (downloaded via npm run fetch-models) and bench output
+/models/
+*.onnx
+*.onnx.part
+/bench-out/
+

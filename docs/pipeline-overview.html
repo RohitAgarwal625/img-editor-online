@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>img-editor-online — Pipeline Overview</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
+  <script>
+    mermaid.initialize({
+      startOnLoad: true, theme: 'neutral', fontFamily: 'Inter, system-ui, sans-serif',
+      flowchart: { curve: 'basis', padding: 20 },
+      themeVariables: { primaryColor: '#e0e7ff', primaryTextColor: '#1a1a2e', primaryBorderColor: '#2563eb', lineColor: '#94a3b8', secondaryColor: '#f1f5f9', tertiaryColor: '#ecfdf5' }
+    });
+  </script>
+  <style>
+:root {
+  --color-bg: #ffffff; --color-bg-card: #f8f9fa; --color-bg-sidebar: #f1f3f5;
+  --color-text: #1a1a2e; --color-text-secondary: #6c757d; --color-heading: #0f172a;
+  --color-accent: #2563eb; --color-accent-hover: #1d4ed8; --color-border: #e2e8f0;
+  --color-success: #059669; --color-success-bg: #ecfdf5; --color-warning: #d97706; --color-warning-bg: #fffbeb;
+  --color-error: #dc2626; --color-error-bg: #fef2f2; --color-info: #2563eb; --color-info-bg: #eff6ff;
+  --color-neutral: #64748b; --color-neutral-bg: #f1f5f9;
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body { font-family: 'Inter', system-ui, -apple-system, sans-serif; font-size: 16px; line-height: 1.7; color: var(--color-text); background: var(--color-bg); }
+.sidebar { position: fixed; top: 0; left: 0; bottom: 0; width: 260px; background: var(--color-bg-sidebar); border-right: 1px solid var(--color-border); padding: 1.5rem 0; overflow-y: auto; z-index: 100; }
+.sidebar a { display: block; padding: 0.4rem 1.25rem; font-size: 0.85rem; color: var(--color-text-secondary); text-decoration: none; border-left: 3px solid transparent; transition: all 0.2s; }
+.sidebar a:hover, .sidebar a.active { color: var(--color-accent); border-left-color: var(--color-accent); background: rgba(37, 99, 235, 0.05); }
+.breadcrumb { position: sticky; top: 0; z-index: 90; background: var(--color-bg); border-bottom: 1px solid var(--color-border); padding: 0.75rem 2rem; margin-left: 260px; font-size: 0.85rem; color: var(--color-text-secondary); display: flex; align-items: center; justify-content: space-between; }
+.breadcrumb a { color: var(--color-accent); text-decoration: none; }
+.content { margin-left: 260px; max-width: 960px; padding: 2rem 2.5rem; }
+section { margin-bottom: 3rem; }
+h1 { font-size: 2rem; font-weight: 700; color: var(--color-heading); margin-bottom: 0.5rem; line-height: 1.3; }
+h2 { font-size: 1.5rem; font-weight: 600; color: var(--color-heading); margin: 2.5rem 0 1rem; padding-bottom: 0.5rem; border-bottom: 1px solid var(--color-border); line-height: 1.35; }
+h3 { font-size: 1.25rem; font-weight: 600; color: var(--color-heading); margin: 1.5rem 0 0.75rem; line-height: 1.4; }
+h4 { margin-bottom: 0.5rem; }
+p, ul, ol { margin: 0.5rem 0; }
+ul, ol { padding-left: 1.5rem; }
+code { font-family: 'JetBrains Mono', 'Fira Code', monospace; font-size: 0.9rem; background: var(--color-bg-card); padding: 0.1rem 0.3rem; border-radius: 4px; }
+.card { background: var(--color-bg-card); border: 1px solid var(--color-border); border-radius: 8px; padding: 1.5rem; margin: 1rem 0; box-shadow: 0 1px 3px rgba(0,0,0,0.08); }
+.badge { display: inline-block; padding: 0.15rem 0.6rem; border-radius: 4px; font-size: 0.75rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.025em; }
+.badge-critical { background: var(--color-error-bg); color: var(--color-error); border: 1px solid #fecaca; }
+.badge-major { background: var(--color-warning-bg); color: var(--color-warning); border: 1px solid #fde68a; }
+.badge-minor { background: var(--color-neutral-bg); color: var(--color-neutral); border: 1px solid var(--color-border); }
+.badge-resolved, .badge-validated, .badge-pass { background: var(--color-success-bg); color: var(--color-success); border: 1px solid #a7f3d0; }
+.badge-open, .badge-fail { background: var(--color-error-bg); color: var(--color-error); border: 1px solid #fecaca; }
+.badge-accepted, .badge-conditional { background: var(--color-warning-bg); color: var(--color-warning); border: 1px solid #fde68a; }
+.badge-in-progress { background: var(--color-info-bg); color: var(--color-info); border: 1px solid #bfdbfe; }
+.badge-deferred { background: var(--color-neutral-bg); color: var(--color-neutral); border: 1px solid var(--color-border); }
+table { width: 100%; border-collapse: collapse; margin: 1rem 0; font-size: 0.9rem; }
+th { background: var(--color-bg-sidebar); font-weight: 600; text-align: left; padding: 0.75rem 1rem; border-bottom: 2px solid var(--color-border); position: sticky; top: 0; }
+td { padding: 0.75rem 1rem; border-bottom: 1px solid var(--color-border); }
+tr:nth-child(even) { background: var(--color-bg-card); }
+details.collapsible { border: 1px solid var(--color-border); border-radius: 8px; margin: 0.75rem 0; }
+details.collapsible summary { padding: 1rem 1.25rem; cursor: pointer; font-weight: 500; list-style: none; display: flex; align-items: center; gap: 0.5rem; }
+details.collapsible summary::before { content: '▸'; transition: transform 0.2s; }
+details.collapsible[open] summary::before { transform: rotate(90deg); }
+details.collapsible .collapsible-content { padding: 0 1.25rem 1.25rem; }
+figure.diagram { background: var(--color-bg); border: 1px solid var(--color-border); border-radius: 8px; padding: 1.5rem; margin: 1.5rem 0; text-align: center; }
+figure.diagram figcaption { margin-top: 0.75rem; font-size: 0.85rem; color: var(--color-text-secondary); font-style: italic; }
+pre.code-block { background: var(--color-bg-card); border: 1px solid var(--color-border); border-radius: 6px; padding: 1rem 1.25rem; overflow-x: auto; font-family: 'JetBrains Mono', monospace; font-size: 0.9rem; line-height: 1.6; }
+.diff-container { display: flex; gap: 1.5rem; margin: 1rem 0; }
+.diff-before, .diff-after { flex: 1; border-radius: 8px; padding: 1rem; }
+.diff-before { border-left: 4px solid var(--color-error); background: var(--color-error-bg); }
+.diff-after { border-left: 4px solid var(--color-success); background: var(--color-success-bg); }
+.progress-bar { height: 8px; border-radius: 4px; background: var(--color-neutral-bg); margin: 0.5rem 0; overflow: hidden; display: flex; }
+.progress-bar .segment-resolved { background: var(--color-success); }
+.progress-bar .segment-in-progress { background: var(--color-warning); }
+.progress-bar .segment-open { background: var(--color-error); }
+.nav-footer { display: flex; justify-content: space-between; align-items: center; margin-top: 3rem; padding-top: 1.5rem; border-top: 1px solid var(--color-border); font-size: 0.9rem; }
+.nav-footer a { color: var(--color-accent); text-decoration: none; }
+@media (max-width: 768px) { .sidebar { display: none; } .content, .breadcrumb { margin-left: 0; } .content { padding: 1rem; } .diff-container { flex-direction: column; } }
+@media print { .sidebar, .breadcrumb, .nav-footer { display: none; } .content { margin-left: 0; max-width: 100%; } }
+  </style>
+</head>
+<body>
+  <nav class="sidebar">
+    <div style="padding: 1rem 1.25rem; font-weight: 700; font-size: 0.9rem; color: var(--color-heading); border-bottom: 1px solid var(--color-border); margin-bottom: 0.75rem;">Table of Contents</div>
+    <a href="#summary">1. Summary</a>
+    <a href="#architecture">2. Architecture</a>
+    <a href="#pipeline">3. Engine pipeline</a>
+    <a href="#code-map">4. Code map</a>
+    <a href="#client-flow">5. Client request flow</a>
+    <a href="#vercel">6. Local vs Vercel</a>
+    <a href="#bike">7. Bike spokes analysis</a>
+    <a href="#todo">8. Left to do</a>
+  </nav>
+
+  <div class="breadcrumb">
+    <div><a href="../README.md">img-editor-online</a> &rsaquo; <a href="./ENGINE.md">Engine</a> &rsaquo; <span>Pipeline Overview</span></div>
+    <span class="badge badge-conditional">⚠ DEPLOYMENT PENDING</span>
+  </div>
+
+  <main class="content">
+    <h1>Background removal — how it works</h1>
+    <p>Code, flow, deployment findings and the bike-spokes investigation. Continue from <code>HANDOFF.md</code>.</p>
+
+    <section id="summary">
+      <h2>1. Summary</h2>
+      <div class="card">
+        <ul>
+          <li>Server engine (BiRefNet + optional ViTMatte) gives the best quality. It works locally.</li>
+          <li>On Vercel the model files are missing (500) and large uploads are rejected (413), so the app uses the lower-quality browser model.</li>
+          <li><code>bike.jpeg</code> loses wheel spokes mainly because BiRefNet sees a 1024×1024 downscale of a 3000×2000 photo.</li>
+        </ul>
+      </div>
+      <p>Progress on the items found in this session:</p>
+      <div class="progress-bar"><div class="segment-resolved" style="width:25%"></div><div class="segment-in-progress" style="width:25%"></div><div class="segment-open" style="width:50%"></div></div>
+      <p style="font-size:0.85rem;color:var(--color-text-secondary)">1 fixed (413 fallback, untested), 1 analysed (spokes), 2 open (hosting, spoke fix).</p>
+    </section>
+
+    <section id="architecture">
+      <h2>2. Architecture</h2>
+      <figure class="diagram">
+        <div class="mermaid">
+flowchart LR
+  U[Browser upload] --> C[background-removal.ts]
+  C -->|POST multipart| API[/api/remove-background/]
+  API --> E[engine pipeline.mjs]
+  E --> M[(models/*.onnx)]
+  C -.->|500 / 404 / 413 / network error| B[Browser fallback: IS-Net via imgly]
+        </div>
+        <figcaption>Figure 1: Server engine first, browser model as fallback</figcaption>
+      </figure>
+    </section>
+
+    <section id="pipeline">
+      <h2>3. Engine pipeline</h2>
+      <figure class="diagram">
+        <div class="mermaid">
+flowchart TD
+  A[1. Ingest: EXIF rotate, single decode] --> B[2. BiRefNet 1024x1024 sigmoid]
+  B --> C[3. Cleanup: components, specks, pinholes]
+  C --> D[4. Guided filter on uncertain band]
+  D --> E[5. Guided upsample to original size]
+  E --> F{6. Crop refine? bbox area ratio <= 0.35}
+  F -->|yes| G[Re-infer on crop]
+  F -->|no| H
+  G --> H{7. Matting? ENGINE_MATTING=auto and soft ratio > 0.02}
+  H -->|yes| I[ViTMatte on boundary band]
+  H -->|no| J
+  I --> J[8. Foreground colour: tiled blur-fusion]
+  J --> K[9. QA flags]
+  K --> L[10. PNG at original resolution]
+        </div>
+        <figcaption>Figure 2: Pipeline stages (<code>docs/ENGINE.md</code>)</figcaption>
+      </figure>
+      <div class="card">
+        <h4>Key settings (<code>models.mjs</code>)</h4>
+        <ul>
+          <li>Guided filter: radius 2, eps 1e-4, band radius 3.</li>
+          <li>Cleanup: <code>minIslandFrac 0.0015</code>, <code>minIslandRel 0.02</code>, <code>maxPinholeFrac 0.00004</code>.</li>
+          <li>Crop refine: <code>maxBboxAreaRatio 0.35</code>, <code>minGain 1.6</code>, margin 0.08.</li>
+          <li>Matting: ViTMatte, max side 768, lo 0.05, hi 0.95, trigger soft ratio 0.02.</li>
+        </ul>
+      </div>
+    </section>
+
+    <section id="code-map">
+      <h2>4. Code map</h2>
+      <table>
+        <thead><tr><th>File</th><th>Role</th></tr></thead>
+        <tbody>
+          <tr><td><code>src/lib/engine/models.mjs</code></td><td>Model registry and pipeline tunables only</td></tr>
+          <tr><td><code>src/lib/engine/alpha-core.mjs</code></td><td>Pure alpha algorithms, cleanup, QA metrics</td></tr>
+          <tr><td><code>src/lib/engine/foreground.mjs</code></td><td>Tiled foreground colour estimation</td></tr>
+          <tr><td><code>src/lib/engine/matting.mjs</code></td><td>Conditional ViTMatte matting</td></tr>
+          <tr><td><code>src/lib/engine/pipeline.mjs</code></td><td>Orchestration, <code>removeBackground()</code>, <code>warmup()</code></td></tr>
+          <tr><td><code>src/lib/background-removal.ts</code></td><td>Client: upload, progress, fallback logic</td></tr>
+          <tr><td><code>scripts/benchmark.mjs</code></td><td>Runs all methods on a folder into <code>bench-out/</code></td></tr>
+          <tr><td><code>scripts/analyze-bike.mjs</code></td><td>Read-only spoke analysis</td></tr>
+          <tr><td><code>tests/*.test.mjs</code></td><td>Engine and stage tests (<code>npm test</code>)</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section id="client-flow">
+      <h2>5. Client request flow</h2>
+      <figure class="diagram">
+        <div class="mermaid">
+sequenceDiagram
+  participant UI
+  participant Client as background-removal.ts
+  participant API as /api/remove-background
+  UI->>Client: removeImageBackground(file)
+  Client->>API: XHR POST (upload progress)
+  alt 200
+    API-->>Client: PNG + x-engine-timings
+    Client-->>UI: result (engine = server)
+  else 4xx except 404 and 413
+    API-->>Client: error
+    Client-->>UI: throw (no fallback)
+  else 5xx / 404 / 413 / network
+    Client->>Client: removeImageBackgroundInBrowser
+    Client-->>UI: result (engine = browser)
+  end
+        </div>
+        <figcaption>Figure 3: Fallback rules after the 413 change</figcaption>
+      </figure>
+      <div class="diff-container">
+        <div class="diff-before"><h4>Before</h4><pre class="code-block"><code>if (status &amp;&amp; status &gt;= 400 &amp;&amp; status &lt; 500
+    &amp;&amp; status !== 404) throw err;</code></pre></div>
+        <div class="diff-after"><h4>After</h4><pre class="code-block"><code>if (status &amp;&amp; status &gt;= 400 &amp;&amp; status &lt; 500
+    &amp;&amp; status !== 404 &amp;&amp; status !== 413) throw err;</code></pre></div>
+      </div>
+    </section>
+
+    <section id="vercel">
+      <h2>6. Local vs Vercel</h2>
+      <table>
+        <thead><tr><th>Aspect</th><th>Local</th><th>Vercel today</th></tr></thead>
+        <tbody>
+          <tr><td>Models</td><td>In <code>models/</code></td><td>Missing → 500 <code>Model weights not found</code></td></tr>
+          <tr><td>Upload size</td><td>No limit set</td><td>About 4.5 MB → 413 for <code>villa.jpeg</code> (7.1 MB)</td></tr>
+          <tr><td>Result</td><td>BiRefNet engine</td><td>Browser IS-Net fallback, lower quality</td></tr>
+          <tr><td>Speed</td><td>4–14 s CPU</td><td>n/a (not running)</td></tr>
+        </tbody>
+      </table>
+      <figure class="diagram">
+        <div class="mermaid">
+flowchart LR
+  V[Vercel: Next.js frontend] -->|ENGINE_URL or rewrite| S[Docker engine service]
+  S --> F[fetch-models.mjs at build/start]
+  F --> H[(Hugging Face / S3 / R2)]
+        </div>
+        <figcaption>Figure 4: Recommended hosting (not built yet)</figcaption>
+      </figure>
+    </section>
+
+    <section id="bike">
+      <h2>7. Bike spokes analysis <span class="badge badge-in-progress">◉ ANALYSED, NOT FIXED</span></h2>
+      <p>Input <code>bg-assets/bike.jpeg</code>, 3000×2000. Output in <code>bench-out/bike/</code>.</p>
+      <table>
+        <thead><tr><th>Method</th><th>Components</th><th>Holes</th><th>Soft ratio</th><th>Verdict</th></tr></thead>
+        <tbody>
+          <tr><td>birefnet-legacy (raw)</td><td>232</td><td>57</td><td>0.0325</td><td><span class="badge badge-minor">already weak in wheels</span></td></tr>
+          <tr><td>birefnet-engine</td><td>74</td><td>54</td><td>0.0490</td><td><span class="badge badge-major">5–10 alpha points lower in wheels</span></td></tr>
+          <tr><td>birefnet-vitmatte</td><td>974</td><td>130</td><td>0.0591</td><td><span class="badge badge-major">noisy</span></td></tr>
+          <tr><td>modnet-engine</td><td>14</td><td>11</td><td>0.0274</td><td><span class="badge badge-fail">loses most of the bike</span></td></tr>
+        </tbody>
+      </table>
+      <details class="collapsible" open>
+        <summary>Causes <span class="badge badge-critical">Primary: model resolution</span></summary>
+        <div class="collapsible-content">
+          <ol>
+            <li>BiRefNet input is a fixed 1024×1024 stretch (about 2.9× horizontal, 2× vertical downscale), so thin spokes shrink to about 1 px or less. The raw model alpha is already weak there.</li>
+            <li>The engine's cleanup and guided filter lower the alpha further (inferred from the engine vs legacy difference, not isolated by an experiment).</li>
+            <li>Crop refine did not run: bbox area ratio 0.698 is above 0.35.</li>
+            <li>ViTMatte runs at 768 px max side and adds noise (974 components).</li>
+            <li>MODNet is a portrait model.</li>
+          </ol>
+        </div>
+      </details>
+      <details class="collapsible">
+        <summary>Suggested changes (not implemented) <span class="badge badge-deferred">⏳ DEFERRED</span></summary>
+        <div class="collapsible-content">
+          <ul>
+            <li>Tiled or multi-scale BiRefNet inference at native resolution.</li>
+            <li>Protect thin structures in cleanup and limit alpha reduction by the guided filter.</li>
+            <li>Relax the crop-refine trigger beyond bbox area.</li>
+            <li>Tiled ViTMatte on the band, with component noise filtering.</li>
+            <li>Optional "thin structures" toggle; Restore brush as the manual workaround today.</li>
+            <li>Add <code>bike</code> to the regression set with a wheel-region alpha metric.</li>
+          </ul>
+        </div>
+      </details>
+      <p style="font-size:0.85rem;color:var(--color-text-secondary)">Not verified: the images were not viewed, and no engine change was tested. The ranking of causes is inferred from the numbers.</p>
+    </section>
+
+    <section id="todo">
+      <h2>8. Left to do</h2>
+      <table>
+        <thead><tr><th>#</th><th>Item</th><th>Status</th></tr></thead>
+        <tbody>
+          <tr><td>1</td><td><code>.gitignore</code> for models, <code>*.onnx</code>, <code>bench-out/</code></td><td><span class="badge badge-open">✗ OPEN</span></td></tr>
+          <tr><td>2</td><td><code>scripts/fetch-models.mjs</code> with checksums</td><td><span class="badge badge-open">✗ OPEN</span></td></tr>
+          <tr><td>3</td><td>Dockerfile and hosting for the engine; <code>ENGINE_URL</code> / rewrite in Vercel</td><td><span class="badge badge-open">✗ OPEN</span></td></tr>
+          <tr><td>4</td><td>Clear startup error when a model file is missing</td><td><span class="badge badge-open">✗ OPEN</span></td></tr>
+          <tr><td>5</td><td>Verify the 413 fallback on the deployed site</td><td><span class="badge badge-in-progress">◉ UNTESTED</span></td></tr>
+          <tr><td>6</td><td>Decide and implement the spoke fix</td><td><span class="badge badge-deferred">⏳ DEFERRED</span></td></tr>
+          <tr><td>7</td><td>Visual review: cycle-boy crop refine, furry-girl ViTMatte</td><td><span class="badge badge-open">✗ OPEN</span></td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <div class="nav-footer">
+      <a href="./ENGINE.md">↑ Engine notes</a>
+      <a href="HANDOFF.md">Handoff file →</a>
+    </div>
+  </main>
+
+  <script>
+    const sections = document.querySelectorAll('section[id]');
+    const tocLinks = document.querySelectorAll('.sidebar a');
+    window.addEventListener('scroll', () => {
+      let current = '';
+      sections.forEach(s => { if (window.scrollY >= s.offsetTop - 100) current = s.id; });
+      tocLinks.forEach(l => l.classList.toggle('active', l.getAttribute('href') === '#' + current));
+    });
+  </script>
+</body>
+</html>
