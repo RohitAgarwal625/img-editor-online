@@ -54,7 +54,7 @@ export async function getSession(id) {
       );
     }
     const o = await ort();
-    const opts = { graphOptimizationLevel: "all", intraOpNumThreads: os.cpus().length };
+    const opts = { graphOptimizationLevel: "all", intraOpNumThreads: os.cpus().length, enableCpuMemArena: false };
     const eps = providerList();
     try {
       const s = await o.InferenceSession.create(file, { ...opts, executionProviders: eps });

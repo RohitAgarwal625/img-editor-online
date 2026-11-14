@@ -151,7 +151,7 @@ The engine needs about 4 GB of RAM, Docker, uploads up to 30 MB, and 10–30 s o
 > - Service `img-editor-online`, region `us-central1`, endpoint `https://img-editor-online-28995425629.us-central1.run.app`
 > - Continuous deploy from GitHub `RohitAgarwal625/img-editor-online`, branch `main`, Dockerfile build. **Every push to `main` redeploys the engine.**
 > - Public access, request-based billing, 0–2 instances, port 8080, 4 GiB / 2 vCPU, timeout 120 s, concurrency 1, second generation, startup CPU boost off.
-> - Env var `ALLOWED_ORIGINS=https://removebg-online.vercel.app,http://localhost:3000`
+> - Env var `ALLOWED_ORIGINS=https://www.getclearedits.online,https://getclearedits.online,https://removebg-online.vercel.app,http://localhost:3000` (custom domain added 2026-11-14)
 > - Model files were removed from git tracking (`git rm --cached`, local copies kept) in commit `2ec9d2e`, which is pushed.
 
 1. **Account:**
