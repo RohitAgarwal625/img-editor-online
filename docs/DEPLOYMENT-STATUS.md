@@ -147,6 +147,13 @@ The engine needs about 4 GB of RAM, Docker, uploads up to 30 MB, and 10–30 s o
 
 ## 7. Next steps (Google Cloud Run)
 
+> **Status (2026-11-14):** the service was created in the Cloud Console UI, not with the CLI below. First build in progress.
+> - Service `img-editor-online`, region `us-central1`, endpoint `https://img-editor-online-28995425629.us-central1.run.app`
+> - Continuous deploy from GitHub `RohitAgarwal625/img-editor-online`, branch `main`, Dockerfile build. **Every push to `main` redeploys the engine.**
+> - Public access, request-based billing, 0–2 instances, port 8080, 4 GiB / 2 vCPU, timeout 120 s, concurrency 1, second generation, startup CPU boost off.
+> - Env var `ALLOWED_ORIGINS=https://removebg-online.vercel.app,http://localhost:3000`
+> - Model files were removed from git tracking (`git rm --cached`, local copies kept) in commit `2ec9d2e`, which is pushed.
+
 1. **Account:**
    - Sign up at https://console.cloud.google.com and add billing.
    - Create a project, e.g. `bg-engine`.
@@ -163,17 +170,17 @@ The engine needs about 4 GB of RAM, Docker, uploads up to 30 MB, and 10–30 s o
    cd ~/Documents/Projects/img-editor-online
    gcloud run deploy bg-engine \
      --source . \
-     --region asia-south1 \
+     --region us-central1 \
      --memory 4Gi --cpu 2 \
      --concurrency 1 --max-instances 2 --min-instances 0 \
      --timeout 120 \
      --allow-unauthenticated \
      --set-env-vars ALLOWED_ORIGINS=https://removebg-online.vercel.app,http://localhost:3000
    ```
-   The command prints the service address, `https://bg-engine-xxxx.a.run.app`.
-4. **Check:** open `https://bg-engine-xxxx.a.run.app/api/health`. You should see `{"ok":true,...}`. If not, check the Cloud Run logs.
+   The command prints the service address, `https://img-editor-online-28995425629.us-central1.run.app`.
+4. **Check:** open `https://img-editor-online-28995425629.us-central1.run.app/api/health`. You should see `{"ok":true,...}`. If not, check the Cloud Run logs.
 5. **Vercel:**
-   - Add `NEXT_PUBLIC_ENGINE_URL=https://bg-engine-xxxx.a.run.app` in Settings → Environment Variables.
+   - Add `NEXT_PUBLIC_ENGINE_URL=https://img-editor-online-28995425629.us-central1.run.app` in Settings → Environment Variables.
    - **Redeploy**, because the value is fixed when the site is built.
 6. **Test:**
    - On the live site, upload `bg-assets/villa.jpeg` (7.1 MB) and `bg-assets/bike.jpeg`.
@@ -187,7 +194,7 @@ What to expect:
 ## 8. Still open (deployment)
 
 - [ ] Do the Cloud Run deployment (§7) and check it end to end. Not done yet.
-- [ ] If `models/*.onnx` were ever committed, run `git rm --cached models/*.onnx` before pushing.
+- [x] Stop tracking `models/*.onnx` in git (done in `2ec9d2e`; local files kept).
 - [ ] Optional: remove the `fetch-models` step from the Dockerfile `CMD` to save cold-start time (§3.8).
 - [ ] Optional: update the Railway example in the `ENGINE_URL` comment in `background-removal.ts`.
 - [ ] Decide whether to keep the browser fallback.
