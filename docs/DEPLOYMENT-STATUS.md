@@ -213,7 +213,7 @@ What to expect:
 
 | Where | Variable | Purpose |
 |---|---|---|
-| Vercel (frontend) | `NEXT_PUBLIC_ENGINE_URL` | Address of the engine host. **Redeploy after changing it.** |
+| Vercel (frontend) | `ENGINE_URL` (or `NEXT_PUBLIC_ENGINE_URL`) | Address of the engine host. `next.config.ts` copies `ENGINE_URL` into the browser bundle at build time, so it is public either way (that's fine: the browser must know it). **Redeploy after changing it.** |
 | Vercel (frontend) | `NEXT_PUBLIC_ALLOW_BROWSER_FALLBACK` | Set to `1` to turn the IS-Net browser fallback back on (default off) |
 | Engine host | `ALLOWED_ORIGINS` | Comma-separated list of sites allowed to call the engine (CORS) |
 | Engine host | `ENGINE_MODEL_DIR` | Model folder (`/app/models` in the Dockerfile) |
