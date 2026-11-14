@@ -10,7 +10,7 @@ COPY . .
 RUN npm run build && ENGINE_MODEL_DIR=/app/models node scripts/fetch-models.mjs
 FROM node:20-bookworm-slim
 WORKDIR /app
-ENV NODE_ENV=production ENGINE_MODEL_DIR=/app/models PORT=8080 HOSTNAME=0.0.0.0
+ENV NODE_ENV=production ENGINE_MODEL_DIR=/app/models PORT=8080 HOSTNAME=0.0.0.0 ENGINE_MATTING=on
 COPY --from=build --chown=node:node /app /app
 USER node
 EXPOSE 8080

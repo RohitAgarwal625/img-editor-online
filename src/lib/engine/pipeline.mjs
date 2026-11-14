@@ -22,7 +22,30 @@ import {
   cleanupComponents, estimateForegroundRGBA, assessAlpha,
 } from "./alpha-core.mjs";
 
-sharp.concurrency(Math.max(1, os.cpus().length - 1));
+/**
+ * CPUs actually available to this process. In containers (Cloud Run) os.cpus()
+ * reports the HOST's cores, not the vCPU quota; using that many ORT threads
+ * oversubscribes the quota and makes inference much slower.
+ * Order: ENGINE_THREADS env > cgroup v2 cpu.max > cgroup v1 quota > os.availableParallelism().
+ */
+function cpuCount() {
+  const env = Number(process.env.ENGINE_THREADS);
+  if (env > 0) return Math.floor(env);
+  const host = typeof os.availableParallelism === "function" ? os.availableParallelism() : os.cpus().length;
+  try {
+    const [q, p] = fs.readFileSync("/sys/fs/cgroup/cpu.max", "utf8").trim().split(/\s+/);
+    if (q !== "max" && Number(q) > 0 && Number(p) > 0) return Math.max(1, Math.min(host, Math.ceil(Number(q) / Number(p))));
+  } catch {}
+  try {
+    const q = Number(fs.readFileSync("/sys/fs/cgroup/cpu/cpu.cfs_quota_us", "utf8"));
+    const p = Number(fs.readFileSync("/sys/fs/cgroup/cpu/cpu.cfs_period_us", "utf8"));
+    if (q > 0 && p > 0) return Math.max(1, Math.min(host, Math.ceil(q / p)));
+  } catch {}
+  return host;
+}
+export const CPUS = cpuCount();
+
+sharp.concurrency(Math.max(1, CPUS - 1));
 
 /* ------------------------------------------------------------------ */
 /* Session management: warm, cached, serialised                        */
@@ -54,8 +77,9 @@ export async function getSession(id) {
       );
     }
     const o = await ort();
-    const opts = { graphOptimizationLevel: "all", intraOpNumThreads: os.cpus().length, enableCpuMemArena: false };
+    const opts = { graphOptimizationLevel: "all", intraOpNumThreads: CPUS, interOpNumThreads: 1, enableCpuMemArena: false };
     const eps = providerList();
+    console.log(`[engine] loading ${id} threads=${CPUS} (host cores=${os.cpus().length}) ep=${eps}`);
     try {
       const s = await o.InferenceSession.create(file, { ...opts, executionProviders: eps });
       return { session: s, providers: eps };
@@ -293,7 +317,9 @@ export async function removeBackground(input, opts = {}) {
 
   // Stage E: conditional trimap-guided matting (ViTMatte) on the boundary only.
   const mc = CFG.matting;
-  const wantMat = opts.matting ?? (process.env.ENGINE_MATTING === "auto" ? "auto" : false); // opt-in until validated against GT
+  // ENGINE_MATTING: "on" = always (bench "birefnet-vitmatte"), "auto" = when soft band is wide, unset/"off" = never.
+  const envMat = (process.env.ENGINE_MATTING || "").toLowerCase();
+  const wantMat = opts.matting ?? (envMat === "on" || envMat === "true" ? true : envMat === "auto" ? "auto" : false);
   const qaSoft = assessAlpha(resizeBilinear(alpha, W, H, pred.mw, pred.mh), pred.mw, pred.mh).softRatio;
   const trigMat = wantMat === true || (wantMat === "auto" && qaSoft >= mc.triggerSoftRatio);
   log.decisions.push({ stage: "matting", softRatio: +qaSoft.toFixed(4), triggered: !!trigMat });
@@ -358,6 +384,7 @@ export async function removeBackground(input, opts = {}) {
 
 /** Warm the primary model so the first request does not pay init cost. */
 export function warmup(opts = {}) {
-  const ids = opts.models ?? [CFG.primaryModel];
+  const mat = (process.env.ENGINE_MATTING || "").toLowerCase();
+  const ids = opts.models ?? [CFG.primaryModel, ...(mat && mat !== "off" && mat !== "false" && fs.existsSync(modelPath(CFG.matting.model)) ? [CFG.matting.model] : [])];
   return Promise.all(ids.map(getSession));
 }
