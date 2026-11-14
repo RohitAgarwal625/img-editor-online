@@ -153,6 +153,8 @@ The engine needs about 4 GB of RAM, Docker, uploads up to 30 MB, and 10–30 s o
 > - Public access, request-based billing, 0–2 instances, port 8080, 4 GiB / 2 vCPU, timeout 120 s, concurrency 1, second generation, startup CPU boost off.
 > - Env var `ALLOWED_ORIGINS=https://www.getclearedits.online,https://getclearedits.online,https://removebg-online.vercel.app,http://localhost:3000` (custom domain added 2026-11-14)
 > - Model files were removed from git tracking (`git rm --cached`, local copies kept) in commit `2ec9d2e`, which is pushed.
+> - **2026-11-14: 4 GiB is too small.** Requests failed with 503/500 after ~22 s (instance killed for running out of memory). Measured locally on `girl-sitting.jpg` (4284×5355): peak memory ~4.9 GB, ~4.5 GB with `enableCpuMemArena: false` (now set in `pipeline.mjs`; idle memory drops from ~850 MB to ~620 MB). **Set memory to 8 GiB** (2 vCPU is still allowed at 8 GiB).
+> - **2026-11-14: WORKING end to end** at 8 GiB / 2 vCPU. Live site `https://www.getclearedits.online` → Cloud Run engine, model `birefnet`. Test on a 512×285 image: HTTP 200, total 38 s, of which BiRefNet inference ~36 s. Inference is the bottleneck on 2 vCPU; options: 4 vCPU (costs more per second but finishes sooner), lower BiRefNet input size, or MODNet for previews.
 
 1. **Account:**
    - Sign up at https://console.cloud.google.com and add billing.
